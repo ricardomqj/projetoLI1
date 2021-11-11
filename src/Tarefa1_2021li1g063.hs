@@ -23,20 +23,20 @@ data Jogador = Jogador Coordenadas Direcao Bool
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa pecas = undefined 
 
-naorepetirposicao :: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool 
+naoRepetirPosicao :: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool 
 naorepetirposicao _ [] = True 
 noarepetirposicao (p1,(x1,y1)) ((p2,(x2,y2)):t) 
     | (x1 == x2) && (y1 == y2) = False
     | otherwise = naorepetirposicao (p1,(x1,y1)) t 
 
-soumaporta :: [(Peca,Coordenadas)] -> Bool 
+soUmaPorta :: [(Peca,Coordenadas)] -> Bool 
 soumaporta [] = False 
 soumaporta ((p1,(x1,y1)):t) 
     | p1 == Porta &&  temporta t = False 
     | p1 /= Porta = soumaporta t
     | otherwise = True 
 
-temporta:: (Peca,Coordenadas) -> Bool 
+temPorta:: (Peca,Coordenadas) -> Bool 
 temporta (p1, (x1,y1))  
     | p1 == Porta = True
     | otherwise = False
