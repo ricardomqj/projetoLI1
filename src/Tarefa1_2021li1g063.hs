@@ -8,15 +8,7 @@ Módulo para a realização da Tarefa 1 do projeto de LI1 em 2021/22.
 -}
 module Tarefa1_2021li1g063 where
 
-type Coordenadas = (Int,Int) 
-data Peca = Bloco | Porta | Caixa | Vazio 
-    deriving (Show, Eq) 
-type Mapa = [[Peca]] 
-
-data Direcao = Este | Oeste 
-data Jogador = Jogador Coordenadas Direcao Bool 
-
-data Jogo = Jogo Mapa Jogador 
+import LI12122
 
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa [] = False 
@@ -27,7 +19,7 @@ validaPotencialMapa (h:t)
 
 --não haver posições repetidas 
 
-naorepetirposicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool                  -- a função vai vereficar se as coordenadas de uma peça se repetem em outra peça 
+naorepetirposicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool               -- a função vai vereficar se as coordenadas de uma peça se repetem em outra peça 
 naorepetirposicao _ [] = True  
 naorepetirposicao (p1,(x1,y1)) ((p2,(x2,y2)):t)
         | x1 == x2 && y1==y2 = False 
