@@ -33,7 +33,12 @@ naoRepetirPosicao (p1,(x1,y1)) ((p2,(x2,y2)):t)
 
 -- 2
 
-
+{- 
+O objetivo do ponto 2 é garantir que o mapa contém apenas uma porta.
+Ora, a função numPortas conta o número de portas contidas no mapa.
+Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
+A função numPortas diz se há apenas uma porta(True) ou não(False)
+-}
 numPortas :: [(Peca, Coordenadas)] -> Int 
 numPortas [] = 0 
 numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
