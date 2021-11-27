@@ -25,12 +25,12 @@ moveJogador jogo movimento = undefined
 correrMovimentos :: Jogo -> [Movimento] -> Jogo
 correrMovimentos (Jogo listapecas (Jogador (x,y) dirj bool)) (h:t) 
     | (dirj == Oeste) && (h == AndarEsquerda) = correrMovimentos (Jogo listapecas (Jogador (x-1,y) Oeste bool)) t 
-    | (dirj == Oeste) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x,y) Este bool)) t 
-    | (dirj == Este) && (h == AndarEsquerda) = correrMovimentos (Jogo listapecas (Jogador (x,y) Oeste bool)) t 
+    | (dirj == Oeste) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x+1,y) Este bool)) t 
+    | (dirj == Este) && (h == AndarEsquerda) = correrMovimentos (Jogo listapecas (Jogador (x-1,y) Oeste bool)) t 
     | (dirj == Este) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x+1,y) Este bool)) t 
     | (h == InterageCaixa) && (bool == True) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj False)) t
     | (h == InterageCaixa) && (bool == False) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj True)) t 
-
+    
 
 
 -- função que verifica se é possivel trepar o obstáculo
@@ -51,5 +51,7 @@ obstaculoAlto (Jogo (peca:t) (Jogador (xj,yj) dirj bool)) ((peca, (x,y)):t)
     | (x == xj + 1) && (y == yj + 1) && (peca == Caixa || peca == Bloco) = True 
     | (x == xj - 1) && (y == yj - 1) && (peca == Caixa || peca == Bloco) = True 
     | otherwise = False
+
+
 
 
