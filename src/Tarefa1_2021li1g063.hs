@@ -11,7 +11,19 @@ module Tarefa1_2021li1g063 where
 import LI12122
 import Tarefa2_2021li1g063 (maximoX, contax)
 
+
+{- 
+type Coordenadas = (Int, Int)
+data Peca = Bloco | Porta | Caixa | Vazio deriving (Show, Eq) 
+type Mapa = [(Peca)] 
+-}
+
+
+
+
+
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
+<<<<<<< src/Tarefa1_2021li1g063.hs
 validaPotencialMapa [] = False
 validaPotencialMapa (h:t)
         | validaposicoes (h:t) == True && vereficarcaixas (h:t) == True  && verificaVazio (h:t) == True = True
@@ -118,3 +130,26 @@ continuacaoPorCima ((p,(x,y)):t) (a,b) (xf,yf)
                 | (Bloco,(a+1,b-1)) `elem` ((p,(x,y)):t) = continuacaoDoChao ((p,(x,y)):t) (a+1,b-1) (xf,yf)
                 | (Bloco,(a,b-1)) `elem` ((p,(x,y)):t)   = continuacaoPorCima ((p,(x,y)):t) (a,b-1) (xf,yf) 
                 | otherwise = False                  
+
+-- 2
+
+{- 
+O objetivo do ponto 2 é garantir que o mapa contém apenas uma porta.
+Ora, a função numPortas conta o número de portas contidas no mapa.
+Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
+A função numPortas diz se há apenas uma porta(True) ou não(False)
+-}
+numPortas :: [(Peca, Coordenadas)] -> Int 
+numPortas [] = 0 
+numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
+                                 Bloco -> numPortas t 
+                                 Caixa -> numPortas t 
+                                 Vazio -> numPortas t 
+
+soUmaPorta :: [(Peca, Coordenadas)] -> Bool 
+soUmaPorta [] = False 
+soUmaPorta l = if numPortas l == 1 then True else False 
+   
+)  
+    
+>>>>>>> src/Tarefa1_2021li1g063.hs
