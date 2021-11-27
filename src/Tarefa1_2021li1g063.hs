@@ -46,6 +46,24 @@ validaposicoes (h:t)
         | otherwise = False
 
 
+-- 2
+
+{- 
+O objetivo do ponto 2 é garantir que o mapa contém apenas uma porta.
+Ora, a função numPortas conta o número de portas contidas no mapa.
+Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
+A função numPortas diz se há apenas uma porta(True) ou não(False)
+-}
+numPortas :: [(Peca, Coordenadas)] -> Int 
+numPortas [] = 0 
+numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
+                                 Bloco -> numPortas t 
+                                 Caixa -> numPortas t 
+                                 Vazio -> numPortas t 
+
+soUmaPorta :: [(Peca, Coordenadas)] -> Bool 
+soUmaPorta [] = False 
+soUmaPorta l = if numPortas l == 1 then True else False 
 
 -- vereficar se a caixa não está a fultuar 
 
@@ -131,25 +149,7 @@ continuacaoPorCima ((p,(x,y)):t) (a,b) (xf,yf)
                 | (Bloco,(a,b-1)) `elem` ((p,(x,y)):t)   = continuacaoPorCima ((p,(x,y)):t) (a,b-1) (xf,yf) 
                 | otherwise = False                  
 
--- 2
-
-{- 
-O objetivo do ponto 2 é garantir que o mapa contém apenas uma porta.
-Ora, a função numPortas conta o número de portas contidas no mapa.
-Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
-A função numPortas diz se há apenas uma porta(True) ou não(False)
--}
-numPortas :: [(Peca, Coordenadas)] -> Int 
-numPortas [] = 0 
-numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
-                                 Bloco -> numPortas t 
-                                 Caixa -> numPortas t 
-                                 Vazio -> numPortas t 
-
-soUmaPorta :: [(Peca, Coordenadas)] -> Bool 
-soUmaPorta [] = False 
-soUmaPorta l = if numPortas l == 1 then True else False 
    
-)  
+ 
     
 >>>>>>> src/Tarefa1_2021li1g063.hs
