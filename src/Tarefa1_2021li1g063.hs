@@ -23,7 +23,6 @@ type Mapa = [(Peca)]
 
 
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
-<<<<<<< src/Tarefa1_2021li1g063.hs
 validaPotencialMapa [] = False
 validaPotencialMapa (h:t)
         | validaposicoes (h:t) == True && vereficarcaixas (h:t) == True  && verificaVazio (h:t) == True = True
@@ -152,4 +151,4 @@ continuacaoPorCima ((p,(x,y)):t) (a,b) (xf,yf)
    
  
     
->>>>>>> src/Tarefa1_2021li1g063.hs
+
