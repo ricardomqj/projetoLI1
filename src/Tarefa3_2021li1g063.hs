@@ -10,12 +10,20 @@ module Tarefa3_2021li1g063 where
 
 import LI12122
 
+{- 
+TAREFA 3
+O objetivo da Tarefa 3 é tornar o tipo de dados Jogo uma instância da class Show de acordo com as formatações pedidas no enunciado.
+-}
+
+
 instance Show Jogo where
      show = jogoParaString 
 
 
 printJogo:: Jogo -> IO() 
 printJogo j = putStrLn $ jogoParaString j
+
+
 
 jogoParaString:: Jogo -> String 
 jogoParaString j = transformador j (0,0) 
@@ -33,6 +41,7 @@ transformadorLinha (h:t) (Jogador (x,y) d tf) (a,b)
             | otherwise = pecaToChar h : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
 
 
+-- | função que atribui a cada peça a formatação correspondente
 pecaToChar:: Peca -> Char 
 pecaToChar p 
     | p == Bloco = 'X'
@@ -40,7 +49,7 @@ pecaToChar p
     | p == Porta = 'P'
     | p == Vazio = ' '  
 
-
+-- | função que atribui ao Jogador a formatação correspondente, tendo em conta a sua direção
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
     | d == Este  = '>' 
