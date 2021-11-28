@@ -84,3 +84,4 @@ aux cx cy ((h:xs):t)
         |h == Vazio = aux (cx+1) cy (xs:t) 
         |otherwise  = (h,(cx,cy)) : aux (cx+1) cy (xs:t)  
 
+
