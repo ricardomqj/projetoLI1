@@ -2,7 +2,7 @@ module Tarefa4_2021li1g063_Spec where
 
 import Test.HUnit
 import LI12122
-import Tarefa3_2021li1g063
+--import Tarefa3_2021li1g063
 import Tarefa4_2021li1g063
 import Fixtures
 
