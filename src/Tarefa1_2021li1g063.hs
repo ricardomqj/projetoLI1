@@ -12,7 +12,7 @@ import LI12122
 import Tarefa2_2021li1g063 (maximoX, contax)
 
 
-{̣-  | 
+{- |
 O objetivo desta tarefa é implementar a função validaPotencialMapa, que testa se uma lista de peças e respetivas coordenadas definem corretamente um mapa. Ora, para isto se verificar, tem de se verificar uma série de condições, definidas no enunciado.
 Caso todas as condições se verifiquem, ou seja, se as funções principais de cada ponto devolverem True, então a função validaPotencialMapa devolverá True também, logo a lista de peças com as respetivas coordenadas define corretamente um mapa.
 -}
