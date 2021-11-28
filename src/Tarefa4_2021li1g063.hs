@@ -152,6 +152,11 @@ transformador (Jogo [] _ ) _ = []
 transformador (Jogo [h] (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b)
 transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
 
+transformadorLinhaCaixa:: [Peca] -> Int -> (Int,Int) -> String 
+transformadorLinhaCaixa [] _ _ = []
+transformadorLinhaCaixa (h:t) n (a,b) 
+                | n == a = 'C' : transformadorLinhaCaixa t n (a+1,b)
+                | otherwise = pecaToChar h : transformadorLinhaCaixa t n (a+1,b) 
 
 transformadorLinha:: [Peca] -> Jogador -> (Int,Int) -> String 
 transformadorLinha [] _ _ = [] 
