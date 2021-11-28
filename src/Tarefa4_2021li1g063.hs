@@ -51,7 +51,7 @@ interageCaixa (Jogo m (Jogador (x,y) d tf))
 
 -- | Função que aborda as consequências de quando o jogador deixa cair a caixa 
 
-deixaCairCaixa::Jogo -> Coordenadas -> Jogo 
+deixaCairCaixa :: Jogo -> Coordenadas -> Jogo 
 deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
                 | d == Este && (pecaCoordenada m (a+1,b+1) (0,0) == Bloco || pecaCoordenada m (a+1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a+1,b) 0)  (Jogador (x,y) Este False))
                 | d == Oeste && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a-1,b) 0)  (Jogador (x,y) Oeste False))
@@ -59,13 +59,13 @@ deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
                 | d == Oeste = deixaCairCaixa (Jogo m (Jogador (x,y) d tf))  (a,b+1)
 
 
-tirarVazio:: Mapa -> Coordenadas -> Int ->  Mapa 
+tirarVazio :: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarVazio [] _ _ = []  
 tirarVazio (h:t) (x,y) b
                 | y == b = substituirVazioCaixa h x 0 : tirarVazio t (x,y) (b+1)   
                 | otherwise = h : tirarVazio t (x,y) (b+1)
 
-substituirVazioCaixa::[Peca] -> Int -> Int -> [Peca]              
+substituirVazioCaixa :: [Peca] -> Int -> Int -> [Peca]              
 substituirVazioCaixa [] _ _ = undefined 
 substituirVazioCaixa (h:t) x a
         | x == a = Caixa : substituirVazioCaixa t x (a+1)
@@ -74,13 +74,13 @@ substituirVazioCaixa (h:t) x a
 
 
 
-tirarCaixa:: Mapa -> Coordenadas -> Int ->  Mapa 
+tirarCaixa :: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarCaixa [] _ _ = []  
 tirarCaixa (h:t) (x,y) b
                 | y == b = substituirCaixaVazio h x 0 : tirarCaixa t (x,y) (b+1)   
                 | otherwise = h : tirarCaixa t (x,y) (b+1) 
 
-substituirCaixaVazio::[Peca] -> Int -> Int -> [Peca]              
+substituirCaixaVazio :: [Peca] -> Int -> Int -> [Peca]              
 substituirCaixaVazio [] _ _ = undefined 
 substituirCaixaVazio (h:t) x a
         | x == a = Vazio : substituirCaixaVazio t x (a+1)
@@ -88,7 +88,7 @@ substituirCaixaVazio (h:t) x a
 
 -- | função que aborda o movimento Trepar 
 
-trepar:: Jogo -> Jogo 
+trepar :: Jogo -> Jogo 
 trepar (Jogo m (Jogador (x,y) d tf))
             | d == Este && (pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo s\ caixa
             | d == Oeste && (pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo s\ caxa
@@ -102,7 +102,7 @@ trepar (Jogo m (Jogador (x,y) d tf))
 
 -- movimentos Laterais 
 
-movimentoNaLateral:: Jogo -> Movimento -> Jogo 
+movimentoNaLateral :: Jogo -> Movimento -> Jogo 
 movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov 
                     | mov == AndarDireita && ( pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) && tf == False = Jogo m (Jogador (x,y) Este tf)                                                        -- andar para Dir s\ caix com obstáculo
                     | mov == AndarEsquerda && ( pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && tf == False = Jogo m (Jogador (x,y) Oeste tf)                                                      -- andar para Esq s\ caix com obstáculo
@@ -111,7 +111,7 @@ movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov
                     | mov == AndarDireita = andarNaLateral (Jogo m (Jogador (x,y) d tf)) AndarDireita  (x,y)
                     | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) AndarEsquerda  (x,y)
 
-andarNaLateral:: Jogo -> Movimento -> Coordenadas -> Jogo
+andarNaLateral :: Jogo -> Movimento -> Coordenadas -> Jogo
 andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b)
                     | mov == AndarDireita && (pecaCoordenada m (a+1,b+1) (0,0) == Bloco || pecaCoordenada m (a+1,b+1) (0,0) == Caixa) = (Jogo m (Jogador (a+1,b) Este  tf))               -- anda para a direita encontra um bloco para andar Dir
                     | mov == AndarEsquerda  && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b+1) (0,0) == Caixa) = (Jogo m (Jogador (a-1,b) Oeste  tf))             --anda para a esquerda encontra um bloco para andar Esq
@@ -119,7 +119,7 @@ andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b)
                     | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b+1)                                                                                    -- -- tenta encontrar um bloco ou caixa para a ESq
 
 
-pecaCoordenada:: Mapa -> Coordenadas -> (Int,Int) -> Peca
+pecaCoordenada :: Mapa -> Coordenadas -> (Int,Int) -> Peca
 pecaCoordenada [] _ _ = undefined 
 pecaCoordenada ([]:t) (x,y) (a,b) = pecaCoordenada t (x,y) (0,b+1)
 pecaCoordenada ((f:rest):t) (x,y) (a,b)
