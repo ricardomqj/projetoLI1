@@ -10,7 +10,7 @@ module Tarefa2_2021li1g063 where
 
 import LI12122
 
-{- 
+{- |
 TAREFA 2
 O objetivo da tarefa 2, é implementar o par de funções constroiMapa e desconstroiMapa.
 A função constroiMapa tem como objetivo construir um mapa dado uma lista de peças e as suas respetivas coordenadas.
@@ -22,13 +22,13 @@ constroiMapa :: [(Peca, Coordenadas)] -> Mapa
 constroiMapa [] = []
 constroiMapa ((p,(x,y)):t) = preencherListas (formarlistas ((p,(x,y)):t) 0 (maximoY (contaY((p,(x,y)):t)) 0)) (maximoX (contaX((p,(x,y)):t)) 0) 
            
--- função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os y's da lista inicial.
+-- | função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os y's da lista inicial.
 
 contaY :: [(Peca,Coordenadas)] -> [Int]
 contaY [] = []
 contaY ((p,(x,y)):t) = y : contaY t 
 
--- função que 
+-- | função que dado uma lista de números inteiros(os y's obtidos da função contaY) e um número inteiro devolve o maior y
 
 maximoY :: [Int] -> Int -> Int 
 maximoY [] ym = ym 
@@ -36,13 +36,13 @@ maximoY (h:t) ym
         | h > ym = maximoY t h 
         | otherwise  = maximoY t ym 
 
--- função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os x's da lista inicial
+-- | função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os x's da lista inicial
 
 contaX :: [(Peca,Coordenadas)] -> [Int]
 contaX [] = []
 contaX ((p,(x,y)):t) = x : contaX t
 
-
+-- | função que dado uma lista de números inteiros (os x's obtidos da lista contaX) e um número inteiro devolve o meior x
 
 maximoX :: [Int] -> Int -> Int 
 maximoX [] xm = xm 
