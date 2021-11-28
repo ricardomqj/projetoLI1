@@ -180,7 +180,7 @@ continuacaoPorCima ((p,(x,y)):t) (a,b) (xf,yf)
                 | (Bloco,(a+1,b)) `elem` ((p,(x,y)):t)   = continuacaoDoChao ((p,(x,y)):t) (a+1,b) (xf,yf)          
                 | (Bloco,(a+1,b-1)) `elem` ((p,(x,y)):t) = continuacaoDoChao ((p,(x,y)):t) (a+1,b-1) (xf,yf)
                 | (Bloco,(a,b-1)) `elem` ((p,(x,y)):t)   = continuacaoPorCima ((p,(x,y)):t) (a,b-1) (xf,yf) 
-                | otherwise = False             
+                | otherwise = False                  
 
    
  
