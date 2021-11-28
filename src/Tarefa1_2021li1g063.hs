@@ -12,10 +12,9 @@ import LI12122
 import Tarefa2_2021li1g063 (maximoX, contax)
 
 
-{- 
-type Coordenadas = (Int, Int)
-data Peca = Bloco | Porta | Caixa | Vazio deriving (Show, Eq) 
-type Mapa = [(Peca)] 
+{- |
+O objetivo desta tarefa é implementar a função validaPotencialMapa, que testa se uma lista de peças e respetivas coordenadas definem corretamente um mapa. Ora, para isto se verificar, tem de se verificar uma série de condições, definidas no enunciado.
+Caso todas as condições se verifiquem, ou seja, se as funções principais de cada ponto devolverem True, então a função validaPotencialMapa devolverá True também, logo a lista de peças com as respetivas coordenadas define corretamente um mapa.
 -}
 
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
@@ -26,8 +25,15 @@ validaPotencialMapa (h:t)
 
 
 --não haver posições repetidas 
+{- | 
+Ponto 1
 
-naorepetirposicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool               -- a função vai vereficar se as coordenadas de uma peça se repetem em outra peça 
+A função naoRepetirPosição vai servir de função auxiliar para a função validaPosicoes.
+A função naoRepetirPosicao, basicamente, com base numa peça, verifica se as coordenadas dessa peça se repetem noutra peça. Caso se repita, a função devolve False.
+A função validaPosicoes com base na função anteriormente definida, naoRepetirPosicao, verifica se há mais do que uma declaração por peça para a mesma posição
+-}
+
+naorepetirposicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool               
 naorepetirposicao _ [] = True
 naorepetirposicao (p1,(x1,y1)) ((p2,(x2,y2)):t)
         | x1 == x2 && y1==y2 = False
@@ -48,6 +54,7 @@ Ora, a função numPortas conta o número de portas contidas no mapa.
 Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
 A função numPortas diz se há apenas uma porta(True) ou não(False)
 -}
+
 numPortas :: [(Peca, Coordenadas)] -> Int 
 numPortas [] = 0 
 numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
@@ -60,7 +67,15 @@ soUmaPorta [] = False
 soUmaPorta l = if numPortas l == 1 then True else False 
 
 
--- vereficar se a caixa não está a fultuar 
+{- | 
+Ponto 3
+Neste jogo, todas as caixas devem estar posicionadas em cima de um bloco ou de outra caixa.
+No ponto 3, a função "vereficarCaixas" verifica se as caixas não se encontram a "flutuar".
+a função auxiliar "vereficarDeBaixo", dado uma peça, verifica se por baixo de uma caixa tem uma caixa ou um bloco, caso tenho um dos dois, a mesma devolve "True", caso contrário, devolve "False".
+Então, a função "vereficarCaixas", dado, o conjunto de peças e coordenadas de um mapa, devolve um True(caso as caixas não estejam a flutuar) ou um False(caso as caixas estejam a flutuar).
+A função vereficarCaixas, recebe uma lista de peças e coordenadas, e caso a primeira peça(cabeça da lista) seja uma caixa, entao se em baixo dessa mesma caixa estiver outra caixa ou um bloco, então a função vereficarCaixas vai percorrer a lista à "procura de caixas a "flutuar" caso não as encontre, vai devolver True caso encontre, devolve False 
+-}
+
 
 vereficarcaixas::[(Peca,Coordenadas)] -> Bool
 vereficarcaixas [] = True
@@ -83,7 +98,19 @@ vereficardebaixo (p1,(x1,y1)) ((p2,(x2,y2)):t)
 
 
 
--- vereficar se há espaços vazios pelo menos um espaço vazio 
+{- | 
+Ponto 4 
+O objetivo do ponto 4 é verificar se existem espaços vazios, sendo que esses espaços vazios podem estar definidos ou não.
+
+Para verificar isso, usamos quatro funções:
+
+- A função procurarVazio, que, caso alguma peça esteja definida como "Vazio" devolve True caso, contrário, a função percorre a lista de peças e respetivas coordenadas, até encontrar uma peça definida por "Vazio" caso não encontre, então devolverá False.
+- A função tamanhoDoMapa é uma função auxiliar bastante simples, que dado umas coordenadas, multiplica o x e o y. Esta função é útil pois vai "ajudar" a calcular o "tamanho total" do mapa (ex: mapa 10 por 10, a função tamanhoDoMapa devolveria 100), usando o x e o y fornecidos pela função maiorElementoDaLista.
+- A função maiorElementoDaLista calcula qual o maior x e y de cada lista;
+- A função verificaVazio, a função principal do ponto 4, com base das 3 funções descritas anteriormente, verifica se há pelo menos um espaço vazio, ou seja:
+- Caso a função procurarVazio devolva True, então já se sabe que há pelo menos um espaço vazio;
+- Caso a função procurarVazio não devolva True, então ou não há espaços vazios, ou então os espaços vazios não estão definidos e, então caso a função tamanhoDoMapa devolva um número inteiro superior à "lenght" da lista com as peças e coordenadas, então é porque existem espaços vazios não definidos, caso a função tamanhoDoMapa devolva um número igual à lenght da lista com as peças e coordenadas, então é porque não existem espaços vazios logo, a função verificaVazio devolverá False.
+-}
 
 verificaVazio:: [(Peca,Coordenadas)] -> Bool
 verificaVazio [] = False
@@ -118,6 +145,11 @@ maiorelementodaLista (xm,ym) ((p,(x,y)):t)
                 | otherwise = maiorelementodaLista (xm,ym) t
 
 --a função verifica a existencia de uma base contínua 
+ 
+{- | Nesta função o objetico évereficar a existẽncia de uma base contínua do jogo, desde o y maior
+em x = 0, até o maior y no maior x.
+     Para isso, q função vai progressivamente vereficar a existẽncia de Blocos ligados entre si,
+     caso a haja uma lacuna a função vai desvalidar o mapa -}
 
 verificaBase::[(Peca,Coordenadas)] -> Bool
 verificaBase [] = False
@@ -148,7 +180,7 @@ continuacaoPorCima ((p,(x,y)):t) (a,b) (xf,yf)
                 | (Bloco,(a+1,b)) `elem` ((p,(x,y)):t)   = continuacaoDoChao ((p,(x,y)):t) (a+1,b) (xf,yf)          
                 | (Bloco,(a+1,b-1)) `elem` ((p,(x,y)):t) = continuacaoDoChao ((p,(x,y)):t) (a+1,b-1) (xf,yf)
                 | (Bloco,(a,b-1)) `elem` ((p,(x,y)):t)   = continuacaoPorCima ((p,(x,y)):t) (a,b-1) (xf,yf) 
-                | otherwise = False           
+                | otherwise = False             
 
    
  
