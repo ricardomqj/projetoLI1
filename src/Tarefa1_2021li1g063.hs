@@ -27,7 +27,7 @@ Na
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa [] = False
 validaPotencialMapa (h:t)
-        | validaPosicoes (h:t) == True && vereficarCaixas (h:t) == True  && verificaVazio (h:t) == True = True
+        | validaposicoes (h:t) && vereficarcaixas (h:t) && verificaVazio (h:t) && soUmaPorta (h:t) && verificaBase (h:t) = True
         | otherwise = False
 
 
