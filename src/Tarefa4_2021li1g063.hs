@@ -172,6 +172,10 @@ pecaToChar p
     | p == Porta = 'P'
     | p == Vazio = ' '  
 
+jogadorToChar:: Jogador -> Char 
+jogadorToChar (Jogador _ d _)
+    | d == Este  = '>' 
+    | d == Oeste = '<'
 
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
