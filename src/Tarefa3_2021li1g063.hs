@@ -13,15 +13,24 @@ import LI12122
 instance Show Jogo where
      show = jogoParaString 
 
-printJogo:: a -> IO() 
-printJogo j = putStrLn "Olá Mundo" 
+
+printJogo:: Jogo -> IO() 
+printJogo j = putStrLn $ jogoParaString j
 
 jogoParaString:: Jogo -> String 
-jogoParaString j = " "
+jogoParaString j = transformador j (0,0) 
 
 transformador:: Jogo -> (Int,Int) -> String  
-transformador (Jogo _ (Jogador (x,y) d tf)) (a,b) 
-                | x == a && y == b = jogadorToChar (Jogador (x,y) d tf) ++ transformador (Jogo _ )
+transformador (Jogo [] _ ) _ = []
+transformador (Jogo [h] (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b)
+transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
+
+
+transformadorLinha:: [Peca] -> Jogador -> (Int,Int) -> String 
+transformadorLinha [] _ _ = [] 
+transformadorLinha (h:t) (Jogador (x,y) d tf) (a,b) 
+            | x == a && y == b = jogadorToChar (Jogador (x,y) d tf) : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
+            | otherwise = pecaToChar h : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
 
 
 pecaToChar:: Peca -> Char 
@@ -34,6 +43,6 @@ pecaToChar p
 
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
-    | d == Este  = '<' 
-    | d == Oeste = '>'
+    | d == Este  = '>' 
+    | d == Oeste = '<'
 
