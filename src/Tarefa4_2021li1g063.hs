@@ -8,7 +8,6 @@ Módulo para a realização da Tarefa 4 do projeto de LI1 em 2021/22.
 -}
 module Tarefa4_2021li1g063 where
 
-
 import LI12122
     ( Coordenadas,
       Direcao(Oeste, Este),
@@ -17,6 +16,13 @@ import LI12122
       Mapa,
       Movimento(..),
       Peca(Caixa, Bloco, Vazio, Porta) )
+import Tarefa3_2021li1g063
+
+{- 
+TAREFA 4
+O objetivo da Tarefa 4 é implementar a função moveJogador, que aplica o efeito de um Movimento sobre o jogador e a sua generalização, a função correrMovimentos.
+A função moveJogador testa se o movimento é aplicável, tendo em conta diversas situações. como quedas, etc...
+-}
 
 instance Show Jogo where
      show = jogoParaString  
@@ -28,28 +34,30 @@ moveJogador (Jogo m (Jogador (x,y) d tf)) mov
                 | mov == InterageCaixa = interageCaixa (Jogo m (Jogador (x,y) d tf))
 
 
--- Interage Caixa 
+-- | função interageCaixa -> aborda o movimento InterageCaixa. Recebendo os dados do jogo e fornece os dados do jogador e mapa após o movimento
 
-interageCaixa:: Jogo -> Jogo 
+interageCaixa :: Jogo -> Jogo 
 interageCaixa (Jogo m (Jogador (x,y) d tf)) 
            |tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa)  =  (Jogo m (Jogador (x,y) d tf))    -- tenta pegar numa caixa a sua direita, há obstáculo
-           |tf ==  False && d == Oeste  && pecaCoordenada m (x-1,y) (0,0) == Caixa && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf))     -- tesnta oegar numa caixa a sua esq, há obstáculo
-           | tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa = (Jogo (tirarCaixa m (x+1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua direita
-           | tf == False && d == Oeste && pecaCoordenada m (x+1,y) (0,0) == Caixa  = (Jogo (tirarCaixa m (x-1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua esquerda
-           | tf == False && (d == Oeste || d == Este) =  (Jogo m (Jogador (x,y) d tf))                                                                                                                             -- nãohá caixa para pegar 
+           |tf ==  False && d == Oeste  && pecaCoordenada m (x-1,y) (0,0) == Caixa && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf))     -- tenta pegar numa caixa a sua esquerda, há obstáculo
+           | tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa = (Jogo (tirarCaixa m (x+1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está à sua direita
+           | tf == False && d == Oeste && pecaCoordenada m (x+1,y) (0,0) == Caixa  = (Jogo (tirarCaixa m (x-1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está à sua esquerda
+           | tf == False && (d == Oeste || d == Este) =  (Jogo m (Jogador (x,y) d tf))                                                                                                                             -- não há caixa para pegar 
            |tf == True && d == Este  && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x+1,y-2) (0,0) == Bloco || pecaCoordenada m (x+1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo
            |tf == True && d == Oeste && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-2) (0,0) == Bloco || pecaCoordenada m (x-1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo 
            | tf == True && d == Este  && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) = (Jogo (tirarVazio m (x+1,y-1) 0) (Jogador (x,y) d False))                         -- largar caixa em cima de outra caixa/bloco
            | tf == True && d == Oeste &&  (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo (tirarVazio m (x-1,y-1) 0) (Jogador (x,y) d False))                        -- largar caixa em cima de outra caixa/bloco
            |tf == True && (d == Este || d == Oeste )  = deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (x,y) 
 
+-- | Função que aborda as consequências de quando o jogador deixa cair a caixa 
 
 deixaCairCaixa::Jogo -> Coordenadas -> Jogo 
 deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
                 | d == Este && (pecaCoordenada m (a+1,b+1) (0,0) == Bloco || pecaCoordenada m (a+1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a+1,b) 0)  (Jogador (x,y) Este False))
-                | d == Oeste && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a-11,b) 0)  (Jogador (x,y) Oeste False))
+                | d == Oeste && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a-1,b) 0)  (Jogador (x,y) Oeste False))
                 | d == Este = deixaCairCaixa  (Jogo m (Jogador (x,y) d tf))  (a,b+1)
                 | d == Oeste = deixaCairCaixa (Jogo m (Jogador (x,y) d tf))  (a,b+1)
+
 
 tirarVazio:: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarVazio [] _ _ = []  
@@ -77,7 +85,8 @@ substituirCaixaVazio [] _ _ = undefined
 substituirCaixaVazio (h:t) x a
         | x == a = Vazio : substituirCaixaVazio t x (a+1)
         | otherwise = h : substituirCaixaVazio t x (a+1) 
--- movimento de Trepar 
+
+-- | função que aborda o movimento Trepar 
 
 trepar:: Jogo -> Jogo 
 trepar (Jogo m (Jogador (x,y) d tf))
