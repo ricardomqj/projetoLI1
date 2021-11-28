@@ -22,7 +22,7 @@ moveJogador :: Jogo -> Movimento -> Jogo
 moveJogador (Jogo m (Jogador (x,y) d tf)) mov 
                 | mov == AndarDireita || mov == AndarEsquerda = movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov
                 | mov == Trepar = trepar (Jogo m (Jogador (x,y) d tf))
-                | mov == InterageCaixa = undefined 
+                | mov == InterageCaixa = interageCaixa (Jogo m (Jogador (x,y) d tf))
 
 
 -- Interage Caixa 
@@ -30,10 +30,38 @@ moveJogador (Jogo m (Jogador (x,y) d tf)) mov
 interageCaixa:: Jogo -> Jogo 
 interageCaixa (Jogo m (Jogador (x,y) d tf)) 
            |tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa)  =  (Jogo m (Jogador (x,y) d tf))    -- tenta pegar numa caixa a sua direita, há obstáculo
-           |tf ==  False && d == Oeste  && pecaCoordenada m (x-1,y) (0,0) == Caixa && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf))
-           | tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa = (Jogo (tirarCaixa m (x+1,y)  ) (Jogador (x,y) d True))
-           | tf == False && d == Oeste && pecaCoordenada m (x+1,y) (0,0) == Caixa  = undefined 
-           |tf == True =undefined 
+           |tf ==  False && d == Oeste  && pecaCoordenada m (x-1,y) (0,0) == Caixa && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf))     -- tesnta oegar numa caixa a sua esq, há obstáculo
+           | tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa = (Jogo (tirarCaixa m (x+1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua direita
+           | tf == False && d == Oeste && pecaCoordenada m (x+1,y) (0,0) == Caixa  = (Jogo (tirarCaixa m (x-1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua esquerda
+           | tf == False && (d == Oeste || d == Este) =  (Jogo m (Jogador (x,y) d tf))                                                                                                                             -- nãohá caixa para pegar 
+           |tf == True && d == Este  && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x+1,y-2) (0,0) == Bloco || pecaCoordenada m (x+1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo
+           |tf == True && d == Oeste && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-2) (0,0) == Bloco || pecaCoordenada m (x-1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo 
+           | tf == True && d == Este  && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) = (Jogo (tirarVazio m (x+1,y-1) 0) (Jogador (x,y) d False))                         -- largar caixa em cima de outra caixa/bloco
+           | tf == True && d == Oeste &&  (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo (tirarVazio m (x-1,y-1) 0) (Jogador (x,y) d False))                        -- largar caixa em cima de outra caixa/bloco
+           |tf == True && (d == Este || d == Oeste )  = deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (x,y) 
+
+
+deixaCairCaixa::Jogo -> Coordenadas -> Jogo 
+deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
+                | d == Este && (pecaCoordenada m (a+1,b+1) (0,0) == Bloco || pecaCoordenada m (a+1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a+1,b) 0)  (Jogador (x,y) Este False))
+                | d == Oeste && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b-1) (0,0) == Caixa) = (Jogo (tirarVazio m (a-11,b) 0)  (Jogador (x,y) Oeste False))
+                | d == Este = deixaCairCaixa  (Jogo m (Jogador (x,y) d tf))  (a,b+1)
+                | d == Oeste = deixaCairCaixa (Jogo m (Jogador (x,y) d tf))  (a,b+1)
+
+tirarVazio:: Mapa -> Coordenadas -> Int ->  Mapa 
+tirarVazio [] _ _ = []  
+tirarVazio (h:t) (x,y) b
+                | y == b = substituirVazioCaixa h x 0 : tirarVazio t (x,y) (b+1)   
+                | otherwise = h : tirarVazio t (x,y) (b+1)
+
+substituirVazioCaixa::[Peca] -> Int -> Int -> [Peca]              
+substituirVazioCaixa [] _ _ = undefined 
+substituirVazioCaixa (h:t) x a
+        | x == a = Caixa : substituirVazioCaixa t x (a+1)
+        | otherwise = h :  substituirVazioCaixa t x (a+1)                 
+
+
+
 
 tirarCaixa:: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarCaixa [] _ _ = []  
@@ -73,10 +101,10 @@ movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov
 
 andarNaLateral:: Jogo -> Movimento -> Coordenadas -> Jogo
 andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b)
-                    | mov == AndarDireita && (pecaCoordenada m (a+1,b-1) (0,0) == Bloco || pecaCoordenada m (a+1,b-1) (0,0) == Caixa) = (Jogo m (Jogador (a+1,b) Este  tf))               -- anda para a direita encontra um bloco para andar Dir
-                    | mov == AndarEsquerda  && (pecaCoordenada m (a-1,b-1) (0,0) == Bloco || pecaCoordenada m (a-1,b-1) (0,0) == Caixa) = (Jogo m (Jogador (a-1,b) Este  tf))             --anda para a esquerda encontra um bloco para andar Esq
-                    | mov == AndarDireita = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b-1)                                                                                     -- tenta encontrar um bloco ou caixa para a Dir
-                    | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b-1)                                                                                    -- -- tenta encontrar um bloco ou caixa para a ESq
+                    | mov == AndarDireita && (pecaCoordenada m (a+1,b+1) (0,0) == Bloco || pecaCoordenada m (a+1,b+1) (0,0) == Caixa) = (Jogo m (Jogador (a+1,b) Este  tf))               -- anda para a direita encontra um bloco para andar Dir
+                    | mov == AndarEsquerda  && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b+1) (0,0) == Caixa) = (Jogo m (Jogador (a-1,b) Oeste  tf))             --anda para a esquerda encontra um bloco para andar Esq
+                    | mov == AndarDireita = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b+1)                                                                                     -- tenta encontrar um bloco ou caixa para a Dir
+                    | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b+1)                                                                                    -- -- tenta encontrar um bloco ou caixa para a ESq
 
 
 pecaCoordenada:: Mapa -> Coordenadas -> (Int,Int) -> Peca
@@ -98,29 +126,6 @@ correrMovimentos (Jogo listapecas (Jogador (x,y) dirj bool)) (h:t)
     | (dirj == Este) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x+1,y) Este bool)) t 
     | (h == InterageCaixa) && (bool == True) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj False)) t
     | (h == InterageCaixa) && (bool == False) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj True)) t 
-    
-
-
--- função que verifica se é possivel trepar o obstáculo
-{-
-podeTrepar :: Jogo -> (Peca, Coordenadas) -> Bool 
-podeTrepar (Jogo (peca:t) (Jogador (xj,yj) dirj bool)) (p,(x,y))
-    | (p == Bloco) && (x == xj + 1) && (dirj == Este) && (obstaculoAlto == False) = True
-    | (p == Caixa) && (x == xj + 1) && (dirj == Este) && (obstaculoAlto == False) = True 
-    | (p == Porta) && (x == xj + 1) && (dirj == Este) = False 
-    | (p == Bloco) && (x == xj - 1) && (dirj == Oeste) && (obstaculoAlto == False) = True 
-    | (p == Caixa) && (x == xj - 1) && (dirj == Oeste) && (obstaculoAlto == False) = True 
-    | otherwise = False -}
-
--- obstáculoAlto -> função que verifica se à direita do Jogador o obstáculo é maior que uma peça de altura
-{-
-obstaculoAlto :: Jogo -> [(Peca, Coordenadas)] -> Bool 
-obstaculoAlto (Jogo (peca:t) (Jogador (xj,yj) dirj bool)) ((peca, (x,y)):t)
-    | (x == xj + 1) && (y == yj + 1) && (peca == Caixa || peca == Bloco) = True 
-    | (x == xj - 1) && (y == yj - 1) && (peca == Caixa || peca == Bloco) = True 
-    | otherwise = False
--}
-
 
 
 
