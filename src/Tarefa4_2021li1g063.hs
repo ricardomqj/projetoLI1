@@ -41,7 +41,7 @@ interageCaixa (Jogo m (Jogador (x,y) d tf))
            |tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa)  =  (Jogo m (Jogador (x,y) d tf))    -- tenta pegar numa caixa a sua direita, há obstáculo
            |tf ==  False && d == Oeste  && pecaCoordenada m (x-1,y) (0,0) == Caixa && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf))     -- tesnta oegar numa caixa a sua esq, há obstáculo
            | tf == False && d == Este  &&  pecaCoordenada m (x+1,y) (0,0) == Caixa = (Jogo (tirarCaixa m (x+1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua direita
-           | tf == False && d == Oeste && pecaCoordenada m (x+1,y) (0,0) == Caixa  = (Jogo (tirarCaixa m (x-1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua esquerda
+           | tf == False && d == Oeste && pecaCoordenada m (x-1,y) (0,0) == Caixa  = (Jogo (tirarCaixa m (x-1,y) 0 ) (Jogador (x,y) d True))                                                                       -- pega numa caixa que está a sua esquerda
            | tf == False && (d == Oeste || d == Este) =  (Jogo m (Jogador (x,y) d tf))                                                                                                                             -- nãohá caixa para pegar 
            |tf == True && d == Este  && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x+1,y-2) (0,0) == Bloco || pecaCoordenada m (x+1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo
            |tf == True && d == Oeste && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-2) (0,0) == Bloco || pecaCoordenada m (x-1,y-2) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) -- largar caixa mas há obstáculo 
@@ -172,10 +172,6 @@ pecaToChar p
     | p == Porta = 'P'
     | p == Vazio = ' '  
 
-jogadorToChar:: Jogador -> Char 
-jogadorToChar (Jogador _ d _)
-    | d == Este  = '>' 
-    | d == Oeste = '<'
 
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
