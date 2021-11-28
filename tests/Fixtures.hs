@@ -110,6 +110,16 @@ jogadorComCaixa =
     [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
   ]    
 
+
+mapaEscadas:: Mapa
+mapaEscadas=
+    [[Vazio,Vazio,Vazio,Vazio,Bloco],
+    [Vazio,Vazio,Vazio,Vazio,Vazio],
+    [Vazio,Vazio,Vazio,Vazio,Bloco],
+    [Caixa,Vazio,Vazio,Bloco,Vazio],
+    [Bloco,Bloco,Bloco,Vazio,Vazio]
+    ]   
+
 m1e1 :: Jogo
 m1e1 = Jogo m1r (Jogador (6, 0) Oeste False)
 
@@ -119,3 +129,8 @@ m1e2 = Jogo m1r (Jogador (2, 3) Oeste False)
 
 jogadorCaixa:: Jogo
 jogadorCaixa = Jogo jogadorComCaixa (Jogador (3,2) Este True)
+
+jogoEscadas:: Jogo
+jogoEscadas = Jogo mapaEscadas (Jogador (1,3) Este False)
+
+
