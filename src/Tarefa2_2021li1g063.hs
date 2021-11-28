@@ -64,6 +64,4 @@ pecaToChar p
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
     | d == Este  = '>' 
-    | d == Oeste = '<'  
-
-
+    | d == Oeste = '<'
