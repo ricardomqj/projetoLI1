@@ -13,15 +13,14 @@ import Tarefa2_2021li1g063 (maximoX, contax)
 
 
 {̣-  | 
-O objetivo desta função é implementar a função validaPotencialMapa
-A função validaPotencialMapa tem como objetivo testar se uma lista de peças e as repetivas coordenadas definem corretamente um mapa.
-Na 
+O objetivo desta tarefa é implementar a função validaPotencialMapa, que testa se uma lista de peças e respetivas coordenadas definem corretamente um mapa. Ora, para isto se verificar, tem de se verificar uma série de condições, definidas no enunciado.
+Caso todas as condições se verifiquem, ou seja, se as funções principais de cada ponto devolverem True, então a função validaPotencialMapa devolverá True também, logo a lista de peças com as respetivas coordenadas define corretamente um mapa.
 -}
 
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa [] = False
 validaPotencialMapa (h:t)
-        | validaposicoes (h:t) && vereficarcaixas (h:t) && verificaVazio (h:t) && soUmaPorta (h:t) && verificaBase (h:t) = True
+        | validaPosicoes (h:t) && vereficarCaixas (h:t) && verificaVazio (h:t) && soUmaPorta (h:t) && verificaBase (h:t) = True
         | otherwise = False
 
 
