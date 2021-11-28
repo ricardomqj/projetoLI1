@@ -29,5 +29,5 @@ testsT4 =
         , [Porta, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco]
         , [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]
         ]
-        (Jogador (2, 3) Oeste False) ~=?  correrMovimentos m1e2 [AndarDireita, InterageCaixa, AndarEsquerda, InterageCaixa]
-    ]
+        (Jogador (2, 3) Oeste False) ~=?  correrMovimentos m1e2 [AndarDireita, InterageCaixa, AndarEsquerda, InterageCaixa] ]
+    
