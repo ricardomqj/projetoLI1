@@ -21,6 +21,12 @@ import LI12122
 instance Show Jogo where
      show = jogoParaString  
 
+{- 
+TAREFA 4
+O objetivo da Tarefa 4 é implementar a função moveJogador, que aplica o efeito de um Movimento sobre o jogador e a sua generalização, a função correrMovimentos.
+A função moveJogador testa se o movimento é aplicável, tendo em conta diversas situações. como quedas, etc...
+-}     
+
 moveJogador :: Jogo -> Movimento -> Jogo
 moveJogador (Jogo m (Jogador (x,y) d tf)) mov 
                 | mov == AndarDireita || mov == AndarEsquerda = movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov
@@ -28,7 +34,7 @@ moveJogador (Jogo m (Jogador (x,y) d tf)) mov
                 | mov == InterageCaixa = interageCaixa (Jogo m (Jogador (x,y) d tf))
 
 
--- Interage Caixa 
+-- | função interageCaixa -> aborda o movimento InterageCaixa. Recebendo os dados do jogo e fornece os dados do jogador e mapa após o movimento
 
 interageCaixa:: Jogo -> Jogo 
 interageCaixa (Jogo m (Jogador (x,y) d tf)) 
@@ -43,6 +49,7 @@ interageCaixa (Jogo m (Jogador (x,y) d tf))
            | tf == True && d == Oeste &&  (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo (tirarVazio m (x-1,y-1) 0) (Jogador (x,y) d False))                        -- largar caixa em cima de outra caixa/bloco
            |tf == True && (d == Este || d == Oeste )  = deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (x,y) 
 
+-- | Função que aborda as consequências de quando o jogador deixa cair a caixa 
 
 deixaCairCaixa::Jogo -> Coordenadas -> Jogo 
 deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
@@ -50,6 +57,8 @@ deixaCairCaixa (Jogo m (Jogador (x,y) d tf)) (a,b)
                 | d == Oeste && (pecaCoordenada m (a-1,b+1) (0,0) == Bloco || pecaCoordenada m (a-1,b+1) (0,0) == Caixa) = (Jogo (tirarVazio m (a-1,b) 0)  (Jogador (x,y) Oeste False))
                 | d == Este = deixaCairCaixa  (Jogo m (Jogador (x,y) d tf))  (a,b+1)
                 | d == Oeste = deixaCairCaixa (Jogo m (Jogador (x,y) d tf))  (a,b+1)
+
+-- | As seguintes funções servem para adicionar uma caixa que o jogador larga ao mapa
 
 tirarVazio:: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarVazio [] _ _ = []  
@@ -64,7 +73,7 @@ substituirVazioCaixa (h:t) x a
         | otherwise = h :  substituirVazioCaixa t x (a+1)                 
 
 
-
+-- As seguintes funções servem para retirar uma caixa que o jogador pegou do mapa
 
 tirarCaixa:: Mapa -> Coordenadas -> Int ->  Mapa 
 tirarCaixa [] _ _ = []  
@@ -77,7 +86,8 @@ substituirCaixaVazio [] _ _ = []
 substituirCaixaVazio (h:t) x a
         | x == a = Vazio : substituirCaixaVazio t x (a+1)
         | otherwise = h : substituirCaixaVazio t x (a+1) 
--- movimento de Trepar 
+
+-- | função que aborda o movimento Trepar 
 
 trepar:: Jogo -> Jogo 
 trepar (Jogo m (Jogador (x,y) d tf))
@@ -91,7 +101,7 @@ trepar (Jogo m (Jogador (x,y) d tf))
             |  d == Oeste = (Jogo m (Jogador (x,y) d tf)) 
     
 
--- movimentos Laterais 
+-- | função que aborda os movimentos Laterais 
 
 movimentoNaLateral:: Jogo -> Movimento -> Jogo 
 movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov 
@@ -109,6 +119,7 @@ andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b)
                     | mov == AndarDireita = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b+1)                                                                                     -- tenta encontrar um bloco ou caixa para a Dir
                     | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) mov  (a,b+1)                                                                                    -- -- tenta encontrar um bloco ou caixa para a ESq
 
+-- | Função verifica que mostra qual é a peça numa determinada Coordenada
 
 pecaCoordenada:: Mapa -> Coordenadas -> (Int,Int) -> Peca
 pecaCoordenada [[x]] _ _ = x 
@@ -116,11 +127,9 @@ pecaCoordenada ([]:t) (x,y) (a,b) = pecaCoordenada t (x,y) (0,b+1)
 pecaCoordenada ((f:rest):t) (x,y) (a,b)
                 | x == a && b == y = f  
                 | otherwise = pecaCoordenada  (rest:t) (x,y) (a+1,b) 
-                
-
---  Explicação da função correrMovimentos
- 
+                 
 -- correrMovimentos aplica consecutivamente os comandos dados pela lista de movimentos
+
 correrMovimentos :: Jogo -> [Movimento] -> Jogo
 correrMovimentos j movs = aux j movs
 
@@ -130,6 +139,7 @@ aux j [] = j
 aux (Jogo m (Jogador (x,y) d tf)) (h:t) = correrMovimentos  (moveJogador (Jogo m (Jogador (x,y) d tf))  h) t 
 
 ---------------- Tarefa 3 ----------------------
+-- Auxilio para testar a Tarefa 4 
 
 printJogo:: Jogo -> IO() 
 printJogo j = putStrLn $ jogoParaString j
@@ -162,7 +172,6 @@ jogadorToChar:: Jogador -> Char
 jogadorToChar (Jogador _ d _)
     | d == Este  = '>' 
     | d == Oeste = '<'
-
 
 
 
