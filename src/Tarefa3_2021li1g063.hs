@@ -10,12 +10,6 @@ module Tarefa3_2021li1g063 where
 
 import LI12122
 
-{- 
-TAREFA 3
-O objetivo da Tarefa 3 é tornar o tipo de dados Jogo uma instância da class Show de acordo com as formatações pedidas no enunciado.
--}
-
-
 instance Show Jogo where
      show = jogoParaString 
 
@@ -23,15 +17,15 @@ instance Show Jogo where
 printJogo:: Jogo -> IO() 
 printJogo j = putStrLn $ jogoParaString j
 
-
-
 jogoParaString:: Jogo -> String 
 jogoParaString j = transformador j (0,0) 
 
 transformador:: Jogo -> (Int,Int) -> String  
 transformador (Jogo [] _ ) _ = []
 transformador (Jogo [h] (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b)
-transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
+transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) 
+                        |tf  && b == y -1  = transformadorLinhaCaixa  h x (a,b) ++  ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)
+                        |otherwise = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
 
 
 transformadorLinha:: [Peca] -> Jogador -> (Int,Int) -> String 
@@ -40,8 +34,13 @@ transformadorLinha (h:t) (Jogador (x,y) d tf) (a,b)
             | x == a && y == b = jogadorToChar (Jogador (x,y) d tf) : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
             | otherwise = pecaToChar h : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
 
+transformadorLinhaCaixa:: [Peca] -> Int -> (Int,Int) -> String 
+transformadorLinhaCaixa [] _ _ = []
+transformadorLinhaCaixa (h:t) n (a,b) 
+                | n == a = 'C' : transformadorLinhaCaixa t n (a+1,b)
+                | otherwise = pecaToChar h : transformadorLinhaCaixa t n (a+1,b) 
 
--- | função que atribui a cada peça a formatação correspondente
+
 pecaToChar:: Peca -> Char 
 pecaToChar p 
     | p == Bloco = 'X'
@@ -49,7 +48,7 @@ pecaToChar p
     | p == Porta = 'P'
     | p == Vazio = ' '  
 
--- | função que atribui ao Jogador a formatação correspondente, tendo em conta a sua direção
+
 jogadorToChar:: Jogador -> Char 
 jogadorToChar (Jogador _ d _)
     | d == Este  = '>' 
