@@ -69,3 +69,5 @@ jogadorToChar (Jogador _ d _)
 
 
 
+
+

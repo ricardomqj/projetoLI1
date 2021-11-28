@@ -96,3 +96,5 @@ aux cx cy ([]:t) = aux 0 (cy+1) t
 aux cx cy ((h:xs):t)
         |h == Vazio = aux (cx+1) cy (xs:t) 
         |otherwise  = (h,(cx,cy)) : aux (cx+1) cy (xs:t)  
+
+
