@@ -98,3 +98,4 @@ aux cx cy ((h:xs):t)
         |otherwise  = (h,(cx,cy)) : aux (cx+1) cy (xs:t)  
 
 
+
