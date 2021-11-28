@@ -18,41 +18,51 @@ data Peca = Bloco | Porta | Caixa | Vazio deriving (Show, Eq)
 type Mapa = [(Peca)] 
 -}
 
-
-
-
+{̣-  | 
+O objetivo desta função é implementar a função validaPotencialMapa
+A função validaPotencialMapa tem como objetivo testar se uma lista de peças e as repetivas coordenadas definem corretamente um mapa.
+Na 
+-}
 
 validaPotencialMapa :: [(Peca, Coordenadas)] -> Bool
 validaPotencialMapa [] = False
 validaPotencialMapa (h:t)
-        | validaposicoes (h:t) == True && vereficarcaixas (h:t) == True  && verificaVazio (h:t) == True = True
+        | validaPosicoes (h:t) == True && vereficarCaixas (h:t) == True  && verificaVazio (h:t) == True = True
         | otherwise = False
 
 
 --não haver posições repetidas 
+{- | 
+Ponto 1
 
-naorepetirposicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool               -- a função vai vereficar se as coordenadas de uma peça se repetem em outra peça 
-naorepetirposicao _ [] = True
-naorepetirposicao (p1,(x1,y1)) ((p2,(x2,y2)):t)
+A função naoRepetirPosição vai servir de função auxiliar para a função validaPosicoes.
+A função naoRepetirPosicao, basicamente, com base numa peça, verifica se as coordenadas dessa peça se repetem noutra peça. Caso se repita, a função devolve False.
+A função validaPosicoes com base na função anteriormente definida, naoRepetirPosicao, verifica se há mais do que uma declaração por peça para a mesma posição
+-}
+
+naoRepetirPosicao:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool               -- a função vai vereficar se as coordenadas de uma peça se repetem em outra peça 
+naoRepetirPosicao _ [] = True
+naoRepetirPosicao (p1,(x1,y1)) ((p2,(x2,y2)):t)
         | x1 == x2 && y1==y2 = False
-        | otherwise = naorepetirposicao (p1,(x1,y1)) t
+        | otherwise = NaoRepetirPosicao (p1,(x1,y1)) t
 
 
-validaposicoes:: [(Peca,Coordenadas)] -> Bool
-validaposicoes [] = True
-validaposicoes (h:t)
-        | naorepetirposicao h t  = validaposicoes t
+validaPosicoes:: [(Peca,Coordenadas)] -> Bool
+validaPosicoes [] = True
+validaPosicoes (h:t)
+        | NaoRepetirPosicao h t  = validaPosicoes t
         | otherwise = False
 
 
--- 2
+{- |           
+Ponto 2
 
-{- 
 O objetivo do ponto 2 é garantir que o mapa contém apenas uma porta.
 Ora, a função numPortas conta o número de portas contidas no mapa.
 Então, o ponto 2 apenas é verdadeiro caso o número de portas seja igual a 1 
 A função numPortas diz se há apenas uma porta(True) ou não(False)
 -}
+
 numPortas :: [(Peca, Coordenadas)] -> Int 
 numPortas [] = 0 
 numPortas ((p, c):t) = case p of Porta -> 1 + numPortas t 
@@ -64,56 +74,74 @@ soUmaPorta :: [(Peca, Coordenadas)] -> Bool
 soUmaPorta [] = False 
 soUmaPorta l = if numPortas l == 1 then True else False 
 
--- vereficar se a caixa não está a fultuar 
+{̣- |
+Ponto 3
+Neste jogo, todas as caixas devem estar posicionadas em cima de um bloco ou de outra caixa.
+No ponto 3, a função "vereficarCaixas" verifica se as caixas não se encontram a "flutuar".
+a função auxiliar "vereficarDeBaixo", dado uma peça, verifica se por baixo de uma caixa tem uma caixa ou um bloco, caso tenho um dos dois, a mesma devolve "True", caso contrário, devolve "False".
+Então, a função "vereficarCaixas", dado, o conjunto de peças e coordenadas de um mapa, devolve um True(caso as caixas não estejam a flutuar) ou um False(caso as caixas estejam a flutuar).
+A função vereficarCaixas, recebe uma lista de peças e coordenadas, e caso a primeira peça(cabeça da lista) seja uma caixa, entao se em baixo dessa mesma caixa estiver outra caixa ou um bloco, então a função vereficarCaixas vai percorrer a lista à "procura de caixas a "flutuar" caso não as encontre, vai devolver True caso encontre, devolve False 
+-}
 
-vereficarcaixas::[(Peca,Coordenadas)] -> Bool
-vereficarcaixas [] = True
-vereficarcaixas ((p,(x,y)):t)
-           |p == Caixa    = if (vereficardebaixo (p,(x,y)) ((p,(x,y)):t)) == True then vereficarcaixas t else False     --verificarcaixas t       --nao verifica a lista toda 
-           |otherwise     = vereficarcaixas t
+vereficarCaixas::[(Peca,Coordenadas)] -> Bool
+vereficarCaixas [] = True
+vereficarCaixas ((p,(x,y)):t)
+           |p == Caixa    = if (vereficarDeBaixo (p,(x,y)) ((p,(x,y)):t)) == True then vereficarCaixas t else False  
+           |otherwise     = vereficarCaixas t
 
-vereficardebaixo:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool
-vereficardebaixo _ [] = False
-vereficardebaixo (p1,(x1,y1)) ((p2,(x2,y2)):t)
+vereficarDeBaixo:: (Peca,Coordenadas) -> [(Peca,Coordenadas)] -> Bool
+vereficarDeBaixo _ [] = False
+vereficarDeBaixo (p1,(x1,y1)) ((p2,(x2,y2)):t)
         | p2 == Caixa && x2 == x1 && y2 == y1 + 1 = True
         | p2 == Bloco && x2 == x1 && y2 == y1 + 1 = True
-        | otherwise = vereficardebaixo (p1,(x1,y1)) t
+        | otherwise = vereficarDeBaixo (p1,(x1,y1)) t
 
+{- | 
+Ponto 4 
+O objetivo do ponto 4 é verificar se existem espaços vazios, sendo que esses espaços vazios podem estar definidos ou não.
 
+Para verificar isso, usamos quatro funções:
 
--- vereficar se há espaços vazios pelo menos um espaço vazio 
+- A função procurarVazio, que, caso alguma peça esteja definida como "Vazio" devolve True caso, contrário, a função percorre a lista de peças e respetivas coordenadas, até encontrar uma peça definida por "Vazio" caso não encontre, então devolverá False.
+- A função tamanhoDoMapa é uma função auxiliar bastante simples, que dado umas coordenadas, multiplica o x e o y. Esta função é útil pois vai "ajudar" a calcular o "tamanho total" do mapa (ex: mapa 10 por 10, a função tamanhoDoMapa devolveria 100), usando o x e o y fornecidos pela função maiorElementoDaLista.
+- A função maiorElementoDaLista calcula qual o maior x e y de cada lista;
+- A função verificaVazio, a função principal do ponto 4, com base das 3 funções descritas anteriormente, verifica se há pelo menos um espaço vazio, ou seja:
+        - Caso a função procurarVazio devolva True, então já se sabe que há pelo menos um espaço vazio;
+        - Caso a função procurarVazio não devolva True, então ou não há espaços vazios, ou então os espaços vazios não estão definidos e, então caso a função tamanhoDoMapa devolva um número inteiro superior à "lenght" da lista com as peças e coordenadas, então é porque existem espaços vazios não definidos, caso a função tamanhoDoMapa devolva um número igual à lenght da lista com as peças e coordenadas, então é porque não existem espaços vazios logo, a função verificaVazio devolverá False.
+-}
 
-verificaVazio:: [(Peca,Coordenadas)] -> Bool
+verificaVazio :: [(Peca,Coordenadas)] -> Bool
 verificaVazio [] = False
 verificaVazio ((p,(x,y)):t)
         |procurarVazio ((p,(x,y)):t) = True 
-        |tamanhodoMapa (maiorelementodaLista (x,y) t) > length ((p,(x,y)):t) = True
+        |tamanhoDoMapa (maiorElementoDaLista (x,y) t) > length ((p,(x,y)):t) = True
         |otherwise = False
 
---procura por a existencia de vazios definidos 
-
-procurarVazio::[(Peca,Coordenadas)] -> Bool
+procurarVazio :: [(Peca,Coordenadas)] -> Bool
 procurarVazio [] = False
 procurarVazio ((p,(x,y)):t)
                 |p == Vazio  = True
                 |otherwise = procurarVazio t
 
---calcula o nº total de elementos que um mapa tem ao todo 
+tamanhoDoMapa :: (Int,Int) -> Int
+tamanhoDoMapa (0,y) = y+1
+tamanhoDoMapa (x,0) = x+1
+tamanhoDoMapa (x,y) = (x+1) * (y+1)
 
-tamanhodoMapa:: (Int,Int) -> Int
-tamanhodoMapa (0,y) = y+1
-tamanhodoMapa (x,0) = x+1
-tamanhodoMapa (x,y) = (x+1) * (y+1)
+maiorElementoDaLista :: (Int,Int) -> [(Peca,Coordenadas)] -> (Int,Int)
+maiorElementoDaLista (x,y) [] = (x,y)
+maiorElementoDaLista (xm,ym) ((p,(x,y)):t)
+                | x > xm && y > ym = maiorElementoDaLista (x,y) t
+                | x == xm && y > ym = maiorElementoDaLista (x,y) t
+                | x > xm && y == ym = maiorElementoDaLista (x,y) t
+                | otherwise = maiorElementoDaLista (xm,ym) t
 
---verefica quais são os maiores x e y de uma lista 
+{- |
+Ponto 5
+O objetivo do ponto 5 é verificar se a base do mapa é composta por blocos.
 
-maiorelementodaLista::(Int,Int) -> [(Peca,Coordenadas)] -> (Int,Int)
-maiorelementodaLista (x,y) [] = (x,y)
-maiorelementodaLista (xm,ym) ((p,(x,y)):t)
-                | x > xm && y > ym = maiorelementodaLista (x,y) t
-                | x == xm && y > ym = maiorelementodaLista (x,y) t
-                | x > xm && y == ym = maiorelementodaLista (x,y) t
-                | otherwise = maiorelementodaLista (xm,ym) t
+-}
+
 
 --a função verifica a existencia de uma base contínua 
 
