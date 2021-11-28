@@ -12,12 +12,6 @@ import LI12122
 import Tarefa2_2021li1g063 (maximoX, contax)
 
 
-{- 
-type Coordenadas = (Int, Int)
-data Peca = Bloco | Porta | Caixa | Vazio deriving (Show, Eq) 
-type Mapa = [(Peca)] 
--}
-
 {̣-  | 
 O objetivo desta função é implementar a função validaPotencialMapa
 A função validaPotencialMapa tem como objetivo testar se uma lista de peças e as repetivas coordenadas definem corretamente um mapa.
@@ -74,7 +68,7 @@ soUmaPorta :: [(Peca, Coordenadas)] -> Bool
 soUmaPorta [] = False 
 soUmaPorta l = if numPortas l == 1 then True else False 
 
-{̣- |
+{- | 
 Ponto 3
 Neste jogo, todas as caixas devem estar posicionadas em cima de um bloco ou de outra caixa.
 No ponto 3, a função "vereficarCaixas" verifica se as caixas não se encontram a "flutuar".
