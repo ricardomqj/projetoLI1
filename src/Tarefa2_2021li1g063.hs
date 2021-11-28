@@ -1,100 +1,69 @@
 {- |
-Module      : Tarefa2_2021li1g063
-Description : Construção/Desconstrução do mapa
+Module      : Tarefa3_2021li1g063
+Description : Representação textual do jogo
 Copyright   : Ricardo Miguel Queirós de Jesus <a100066@alunos.uminho.pt>;
             : Rui Pinto <a100659@alunos.uminho.pt>;
 
-Módulo para a realização da Tarefa 2 do projeto de LI1 em 2021/22.
+Módulo para a realização da Tarefa 3 do projeto de LI1 em 2021/22.
 -}
-module Tarefa2_2021li1g063 where
+module Tarefa3_2021li1g063 where
 
 import LI12122
 
-{- |
-TAREFA 2
-O objetivo da tarefa 2, é implementar o par de funções constroiMapa e desconstroiMapa.
-A função constroiMapa tem como objetivo construir um mapa dado uma lista de peças e as suas respetivas coordenadas.
-A função desconstroiMapa toma um mapa e devolve a listagem das suas peças e respetivas coordenadas
+instance Show Jogo where
+     show = jogoParaString 
+
+{- 
+TAREFA 3
+O objetivo da Tarefa 3 é tornar o tipo de dados Jogo uma instância da class Show de acordo com as formatações pedidas no enunciado.
 -}
+-- | Vai imprimir o Jogo 
 
-constroiMapa :: [(Peca, Coordenadas)] -> Mapa 
-constroiMapa [] = []
-constroiMapa ((p,(x,y)):t) = preencherListas (formarlistas ((p,(x,y)):t) 0 (maximoY (contay((p,(x,y)):t)) 0)) (maximoX (contax((p,(x,y)):t)) 0) 
-           
--- | função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os y's da lista inicial.
+printJogo:: Jogo -> IO() 
+printJogo j = putStrLn $ jogoParaString j
 
-contay::[(Peca,Coordenadas)] -> [Int]
-contay [] = []
-contay ((p,(x,y)):t) = y : contay t
+jogoParaString:: Jogo -> String 
+jogoParaString j = transformador j (0,0) 
 
--- | função que dado uma lista de números inteiros(os y's obtidos da função contaY) e um número inteiro devolve o maior y
+-- | Função que servir para tirar as listas da String 
 
-maximoY::[Int] -> Int -> Int 
-maximoY [] ym = ym 
-maximoY (h:t) ym 
-        | h > ym = maximoY t h 
-        | otherwise  = maximoY t ym 
+transformador:: Jogo -> (Int,Int) -> String  
+transformador (Jogo [] _ ) _ = []
+transformador (Jogo [h] (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b)
+transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) 
+                        |tf  && b == y -1  = transformadorLinhaCaixa  h x (a,b) ++  ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)
+                        |otherwise = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
 
--- | função que dada uma lista de peças e respetivas coordenadas devolve uma lista com os x's da lista inicial
+-- | vai percorrer a linha e transformar cada Peca no correspondente Char e adicionaro Jogador  
 
-contax::[(Peca,Coordenadas)] -> [Int]
-contax [] = []
-contax ((p,(x,y)):t) = x : contax t
+transformadorLinha:: [Peca] -> Jogador -> (Int,Int) -> String 
+transformadorLinha [] _ _ = [] 
+transformadorLinha (h:t) (Jogador (x,y) d tf) (a,b) 
+            | x == a && y == b = jogadorToChar (Jogador (x,y) d tf) : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
+            | otherwise = pecaToChar h : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
 
--- | função que dado uma lista de números inteiros (os x's obtidos da lista contaX) e um número inteiro devolve o meior x
+-- | Função que no caso que o jgador carrega uma caixa, vai adicionar essa caixa a String 
 
-maximoX::[Int] -> Int -> Int 
-maximoX [] xm = xm 
-maximoX (h:t) xm 
-        | h > xm = maximoX t h 
-        | otherwise  = maximoX t xm 
+transformadorLinhaCaixa:: [Peca] -> Int -> (Int,Int) -> String 
+transformadorLinhaCaixa [] _ _ = []
+transformadorLinhaCaixa (h:t) n (a,b) 
+                | n == a = 'C' : transformadorLinhaCaixa t n (a+1,b)
+                | otherwise = pecaToChar h : transformadorLinhaCaixa t n (a+1,b) 
 
--- | função que dada uma lista de peças e ym vai devolver uma lista de listas em que cada lista corresponde ás peças definidas para um determinado y
+-- | função que atribui a cada peça a formatação correspondente
 
-formarlistas::[(Peca,Coordenadas)] -> Int -> Int -> [[(Peca,Coordenadas)]]
-formarlistas ((p,(x,y)):t) n ym 
-                        | n == ym   = [procuraPecaCoord ((p,(x,y)):t) ym]
-                        | otherwise = procuraPecaCoord ((p,(x,y)):t) n : formarlistas ((p,(x,y)):t) (n+1) ym  
+pecaToChar:: Peca -> Char 
+pecaToChar p 
+    | p == Bloco = 'X'
+    | p == Caixa = 'C'
+    | p == Porta = 'P'
+    | p == Vazio = ' '  
 
+-- | função que atribui ao Jogador a formatação correspondente, tendo em conta a sua direção
 
-procuraPecaCoord::[(Peca,Coordenadas)] -> Int -> [(Peca,Coordenadas)]
-procuraPecaCoord [] n = [] 
-procuraPecaCoord ((p,(x,y)):t) n 
-            | n == y = (p,(x,y)) : procuraPecaCoord t n 
-            |otherwise = procuraPecaCoord t n 
-
--- | Dando uma lista de listas de peçasque partilha mesmo y, vai formar listas onde vai ter as peças definidas e os vazios omitidos 
-preencherListas::[[(Peca,Coordenadas)]] -> Int -> [[Peca]] 
-preencherListas [] _ = [] 
-preencherListas ([]:t) xm = criaListadePecas [] 0 xm : preencherListas t xm 
-preencherListas (((p,(x,y)):xs):t) xm = criaListadePecas (((p,(x,y)):xs)) 0 xm : preencherListas t xm 
-        
-
-criaListadePecas::[(Peca,Coordenadas)] -> Int -> Int  -> [Peca]
-criaListadePecas [] n xm 
-                |n == xm   = [Vazio]
-                |otherwise = Vazio : criaListadePecas [] (n+1) xm 
-criaListadePecas ((p,(x,y)):t) n xm
-            | n == xm = [encontrarXpeca xm (((p,(x,y)):t))]
-            | elem n (contax ((p,(x,y)):t))  = encontrarXpeca n ((p,(x,y)):t) : criaListadePecas ((p,(x,y)):t) (n+1) xm
-            | otherwise = Vazio : criaListadePecas ((p,(x,y)):t) (n+1) xm
-
-encontrarXpeca:: Int -> [(Peca,Coordenadas)] -> Peca 
-encontrarXpeca _ [] = Vazio 
-encontrarXpeca n ((p,(x,y)):t) 
-                | n == x = p 
-                | otherwise = encontrarXpeca n t            
-
--- | Dando um Mapa a função vai retirar os vazios da mesma e, com ajuda de um acumulador, vai devolver as peças com as determinadas coordenadas
-
-desconstroiMapa :: Mapa -> [(Peca, Coordenadas)]
-desconstroiMapa mapa = aux 0 0  mapa 
-
-aux::Int -> Int -> Mapa -> [(Peca,Coordenadas)]
-aux _ _ [] = []
-aux cx cy ([]:t) = aux 0 (cy+1) t
-aux cx cy ((h:xs):t)
-        |h == Vazio = aux (cx+1) cy (xs:t) 
-        |otherwise  = (h,(cx,cy)) : aux (cx+1) cy (xs:t)    
+jogadorToChar:: Jogador -> Char 
+jogadorToChar (Jogador _ d _)
+    | d == Este  = '>' 
+    | d == Oeste = '<'  
 
 
