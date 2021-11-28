@@ -8,6 +8,7 @@ Módulo para a realização da Tarefa 4 do projeto de LI1 em 2021/22.
 -}
 module Tarefa4_2021li1g063 where
 
+
 import LI12122
     ( Coordenadas,
       Direcao(Oeste, Este),
@@ -15,8 +16,10 @@ import LI12122
       Jogo(..),
       Mapa,
       Movimento(..),
-      Peca(Caixa, Bloco, Vazio) )
+      Peca(Caixa, Bloco, Vazio, Porta) )
 
+instance Show Jogo where
+     show = jogoParaString  
 
 moveJogador :: Jogo -> Movimento -> Jogo
 moveJogador (Jogo m (Jogador (x,y) d tf)) mov 
@@ -79,7 +82,7 @@ substituirCaixaVazio (h:t) x a
 trepar:: Jogo -> Jogo 
 trepar (Jogo m (Jogador (x,y) d tf))
             | d == Este && (pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) && (pecaCoordenada m (x+1,y-1) (0,0) == Bloco || pecaCoordenada m (x+1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo s\ caixa
-            | d == Oeste && (pecaCoordenada m (x-11,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo s\ caxa
+            | d == Oeste && (pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && (pecaCoordenada m (x-1,y-1) (0,0) == Bloco || pecaCoordenada m (x-1,y-1) (0,0) == Caixa) = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo s\ caxa
             |  d == Este && tf == True && (pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) && pecaCoordenada m (x+1,y-2) (0,0) == Bloco = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo c/ caixa 
             |  d == Oeste && tf == True && (pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && pecaCoordenada m (x-1,y-2) (0,0) == Bloco  = (Jogo m (Jogador (x,y) d tf)) --subir c/ obstáculo c/ caixa 
             | d == Este && (pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) = (Jogo m (Jogador (x+1,y-1) d tf))
@@ -119,13 +122,46 @@ pecaCoordenada ((f:rest):t) (x,y) (a,b)
  
 -- correrMovimentos aplica consecutivamente os comandos dados pela lista de movimentos
 correrMovimentos :: Jogo -> [Movimento] -> Jogo
-correrMovimentos (Jogo listapecas (Jogador (x,y) dirj bool)) (h:t) 
-    | (dirj == Oeste) && (h == AndarEsquerda) = correrMovimentos (Jogo listapecas (Jogador (x-1,y) Oeste bool)) t 
-    | (dirj == Oeste) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x+1,y) Este bool)) t 
-    | (dirj == Este) && (h == AndarEsquerda) = correrMovimentos (Jogo listapecas (Jogador (x-1,y) Oeste bool)) t 
-    | (dirj == Este) && (h == AndarDireita) = correrMovimentos (Jogo listapecas (Jogador (x+1,y) Este bool)) t 
-    | (h == InterageCaixa) && (bool == True) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj False)) t
-    | (h == InterageCaixa) && (bool == False) = correrMovimentos (Jogo listapecas (Jogador (x,y) dirj True)) t 
+correrMovimentos j movs = aux j movs
+
+    
+aux :: Jogo -> [Movimento] -> Jogo
+aux j [] = j
+aux (Jogo m (Jogador (x,y) d tf)) (h:t) = correrMovimentos  (moveJogador (Jogo m (Jogador (x,y) d tf))  h) t 
+
+---------------- Tarefa 3 ----------------------
+
+printJogo:: Jogo -> IO() 
+printJogo j = putStrLn $ jogoParaString j
+
+jogoParaString:: Jogo -> String 
+jogoParaString j = transformador j (0,0) 
+
+transformador:: Jogo -> (Int,Int) -> String  
+transformador (Jogo [] _ ) _ = []
+transformador (Jogo [h] (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b)
+transformador (Jogo (h:t) (Jogador (x,y) d tf)) (a,b) = transformadorLinha h (Jogador (x,y) d tf) (a,b) ++ ['\n'] ++ transformador (Jogo t (Jogador (x,y) d tf)) (a,b+1)  
+
+
+transformadorLinha:: [Peca] -> Jogador -> (Int,Int) -> String 
+transformadorLinha [] _ _ = [] 
+transformadorLinha (h:t) (Jogador (x,y) d tf) (a,b) 
+            | x == a && y == b = jogadorToChar (Jogador (x,y) d tf) : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
+            | otherwise = pecaToChar h : transformadorLinha t (Jogador (x,y) d tf) (a+1,b) 
+
+
+pecaToChar:: Peca -> Char 
+pecaToChar p 
+    | p == Bloco = 'X'
+    | p == Caixa = 'C'
+    | p == Porta = 'P'
+    | p == Vazio = ' '  
+
+
+jogadorToChar:: Jogador -> Char 
+jogadorToChar (Jogador _ d _)
+    | d == Este  = '>' 
+    | d == Oeste = '<'
 
 
 
