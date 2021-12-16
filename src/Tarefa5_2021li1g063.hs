@@ -15,13 +15,13 @@ import Graphics.Gloss.Interface.Pure.Game
 
 data Estado = Estado { menu::Menu , game::Game }
 
-data Game = Nada | PlayMapa1 | PlayMapa2 | PlayMapa3 
+data Game = Nada | PlayMapa1 | PlayMapa2 | PlayMapa3 | PlayMapa4 | PlayMapa5 | PlayMapa6
              
 data Menu = OpcaoNovojogo | OpcaoContinuar | OpcaoEscolherMapa Mapas 
-data Mapas = Mapa1 | Mapa2 | Mapa3 | SemMapa
+data Mapas = Mapa1 | Mapa2 | Mapa3 | Mapa4 | Mapa5 | Mapa6 | SemMapa
 
 window::Display 
-window = InWindow "Block Dude" (1600,800) (0,0) 
+window = FullScreen
 
 background::Color 
 background = greyN 0.8
@@ -53,19 +53,42 @@ textEsc::Picture
 textEsc = color white (Translate (-230) (-210) (scale 0.5 0.5 (Text "Escolher Mapa")))
 
 textMapa1::Picture 
-textMapa1 = color white (Translate (-650) 230 (scale 0.5 0.5 (Text "Nivel 1")))
+textMapa1 = color white (Translate (-620) 225 (scale 0.3 0.3 (Text "Nivel 1")))
 
+textMapa2 :: Picture 
+textMapa2 = color white (Translate (-620) 25 (scale 0.3 0.3 (Text "Nivel 2")))
 
+textMapa3 :: Picture 
+textMapa3 = color white (Translate (-620) (-165) (scale 0.3 0.3 (Text "Nivel 3")))
+
+textMapa4 :: Picture 
+textMapa4 = color white (Translate 350 225 (scale 0.3 0.3 (Text "Nivel 4")))
+
+textMapa5 :: Picture 
+textMapa5 = color white (Translate 350 25 (scale 0.3 0.3 (Text "Nivel 5")))
+
+textMapa6 :: Picture 
+textMapa6 = color white (Translate 350 (-165) (scale 0.3 0.3 (Text "Nivel 6")))
 
 -- | Mapas disponíveis para opção
-mapa1::Picture 
+mapa1 :: Picture 
 mapa1 = translate (-650) 250 (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
 
-mapa2::Picture 
+mapa2 :: Picture 
 mapa2 = translate (-650) 50 (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
 
-mapa3::Picture 
+mapa3 :: Picture 
 mapa3 = translate (-650) (-150) (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
+
+mapa4 :: Picture 
+mapa4 = translate (350) (250) (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
+
+mapa5 :: Picture 
+mapa5 = translate (350) (50) (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
+
+mapa6 :: Picture 
+mapa6 = translate (350) (-150) (Polygon [(-75,75),(300,75),(300,-75),(-75,-75),(-75,75)])
+
 
 -- | Pictures do Menu inicial
 menuInicialNov:: Picture 
@@ -79,13 +102,22 @@ menuInicialEsc = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc,color blue
 
 -- | Pictures do Escolher Mapa
 escolherMapa1:: Picture 
-escolherMapa1 = pictures [mapa1,mapa2,mapa3,color blue mapa1, textMapa1]
+escolherMapa1 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue mapa1, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
 
 escolherMapa2::Picture 
-escolherMapa2 = pictures [mapa1,mapa2,mapa3,color blue mapa2, textMapa1]
+escolherMapa2 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue mapa2, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
 
 escolherMapa3::Picture 
-escolherMapa3 = pictures [mapa1,mapa2,mapa3,color blue mapa3, textMapa1]
+escolherMapa3 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue mapa3, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
+
+escolherMapa4 :: Picture 
+escolherMapa4 = pictures [mapa1, mapa2, mapa3, mapa4, mapa5, mapa6, color blue mapa4, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
+
+escolherMapa5 :: Picture 
+escolherMapa5 = pictures [mapa1, mapa2, mapa3, mapa4, mapa5, mapa6, color blue mapa5, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
+
+escolherMapa6 :: Picture 
+escolherMapa6 = pictures [mapa1, mapa2, mapa3, mapa4, mapa5, mapa6, color blue mapa6, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6]
 
 drawEstado::Estado -> Picture
 drawEstado (Estado OpcaoNovojogo Nada) = menuInicialNov 
@@ -94,6 +126,9 @@ drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada) = menuInicialEsc
 drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada) = escolherMapa1
 drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada) = escolherMapa2
 drawEstado (Estado (OpcaoEscolherMapa Mapa3) Nada) = escolherMapa3
+drawEstado (Estado (OpcaoEscolherMapa Mapa4) Nada) = escolherMapa4 
+drawEstado (Estado (OpcaoEscolherMapa Mapa5) Nada) = escolherMapa5
+drawEstado (Estado (OpcaoEscolherMapa Mapa6) Nada) = escolherMapa6 
 
 reageEvento :: Event -> Estado -> Estado
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoNovojogo Nada)  = Estado OpcaoContinuar Nada
@@ -107,6 +142,18 @@ reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa 
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada) = Estado (OpcaoEscolherMapa Mapa2) Nada 
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada) = Estado (OpcaoEscolherMapa Mapa1) Nada
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada) = Estado (OpcaoEscolherMapa Mapa3) Nada
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada) = Estado (OpcaoEscolherMapa Mapa4) Nada
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada) = Estado (OpcaoEscolherMapa Mapa5) Nada
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada) = Estado (OpcaoEscolherMapa Mapa6) Nada
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada) = Estado (OpcaoEscolherMapa Mapa5) Nada 
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada) = Estado (OpcaoEscolherMapa Mapa6) Nada 
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada) = Estado (OpcaoEscolherMapa Mapa4) Nada
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada) = Estado (OpcaoEscolherMapa Mapa6) Nada 
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada) = Estado (OpcaoEscolherMapa Mapa4) Nada 
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada) = Estado (OpcaoEscolherMapa Mapa5) Nada  
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada) = Estado (OpcaoEscolherMapa Mapa1) Nada
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada) = Estado (OpcaoEscolherMapa Mapa2) Nada
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada) = Estado (OpcaoEscolherMapa Mapa3) Nada
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada) = Estado (OpcaoEscolherMapa SemMapa) Nada 
 reageEvento (EventKey (Char 'f') Down _ _)  (Estado (OpcaoEscolherMapa Mapa2) Nada) = Estado (OpcaoEscolherMapa SemMapa) Nada
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada) = Estado (OpcaoEscolherMapa SemMapa) Nada                          
