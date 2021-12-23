@@ -108,7 +108,7 @@ movimentoNaLateral (Jogo m (Jogador (x,y) d tf)) mov
                     | mov == AndarDireita && ( pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) && tf == False = Jogo m (Jogador (x,y) Este tf)                                                        -- andar para Dir s\ caix com obstáculo
                     | mov == AndarEsquerda && ( pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) && tf == False = Jogo m (Jogador (x,y) Oeste tf)                                                      -- andar para Esq s\ caix com obstáculo
                     | mov == AndarDireita && ( ( pecaCoordenada m (x+1,y) (0,0) == Bloco || pecaCoordenada m (x+1,y) (0,0) == Caixa) || pecaCoordenada m (x+1,y-1) (0,0) == Bloco ) && tf == True = Jogo m (Jogador (x,y) Este tf)        -- andar para Dir c/ caix com obstáculo
-                    | mov == AndarEsquerda && ( ( pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) || pecaCoordenada m (x+1,y-1) (0,0) == Bloco ) && tf == True = Jogo m (Jogador (x,y) Oeste tf)      -- andar para Esq c/ caix com obstáculo 
+                    | mov == AndarEsquerda && ( ( pecaCoordenada m (x-1,y) (0,0) == Bloco || pecaCoordenada m (x-1,y) (0,0) == Caixa) || pecaCoordenada m (x-1,y-1) (0,0) == Bloco ) && tf == True = Jogo m (Jogador (x,y) Oeste tf)      -- andar para Esq c/ caix com obstáculo 
                     | mov == AndarDireita = andarNaLateral (Jogo m (Jogador (x,y) d tf)) AndarDireita  (x,y)
                     | mov == AndarEsquerda = andarNaLateral (Jogo m (Jogador (x,y) d tf)) AndarEsquerda  (x,y)
 
