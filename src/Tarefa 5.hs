@@ -4,17 +4,16 @@ import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import Graphics.Gloss.Juicy
 import LI12122 
-import Outro (mapa1dojogo) 
+import Outro (mapa1dojogo, mapa2dojogo, mapa5dojogo) 
 import Tarefa4_2021li1g063 (moveJogador)
+import Tarefa2_2021li1g063 (desconstroiMapa)
 
 
-data Estado = Estado { menu::Menu , game::Game ,  jogo::Jogo }
+data Estado = Estado { menu::Menu , game::Game ,  jogo::Jogo } 
 
 data Game = Nada | Play Mapas | Alterado 
-
---data Movs = AndarD | AndarE | Trep | Inter
              
-data Menu = OpcaoNovojogo | OpcaoContinuar | OpcaoEscolherMapa Mapas 
+data Menu = OpcaoNovojogo | OpcaoContinuar | OpcaoEscolherMapa Mapas | Win
 data Mapas = Mapa1 | Mapa2 | Mapa3 | SemMapa
 
 window::Display 
@@ -80,32 +79,49 @@ escolherMapa2 = pictures [mapa1,mapa2,mapa3,color blue mapa2]
 escolherMapa3::Picture 
 escolherMapa3 = pictures [mapa1,mapa2,mapa3,color blue mapa3]
 
+-- | Menu "Ganhou"
+
+mensWin::Picture 
+mensWin = Text "Win"
+
 -- | Pictures Mapas
 
 playMapa1::Picture 
-playMapa1 = pictures (treatGame(Jogo mapa1dojogo (Jogador (3,3) Este False)))
+playMapa1 = pictures (treatGame(Jogo mapa1dojogo  (Jogador (3,3) Este False)))
+
+giveWin::Estado -> Bool
+giveWin (Estado opc  est   (Jogo m (Jogador cord dir tf))) | cord == snd (head(filter ((== Porta).fst) (desconstroiMapa m))) =  True
+                                                           | otherwise = False
+
 
 drawEstado::Estado -> Picture
-drawEstado (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialNov 
-drawEstado (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialCont 
-drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialEsc 
-drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa1
-drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa2
-drawEstado (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa3
-drawEstado (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (3,3) Este False))) = playMapa1 
-drawEstado (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) dir tf))) = pictures (treatGame (Jogo mapa1dojogo (Jogador (x,y) dir tf)))
-
+-- | Mensagem Win
+drawEstado (Estado Win Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialNov
+-- | Opções dos Menus
+drawEstado (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialNov 
+drawEstado (Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialCont 
+drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialEsc 
+drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa1
+drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada  (Jogo mapa2dojogo (Jogador (2,3) Este False))) = escolherMapa2
+drawEstado (Estado (OpcaoEscolherMapa Mapa3) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa3
+-- | Desenhar Mapas 
+drawEstado (Estado est (Play Mapa1)  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = playMapa1 
+drawEstado (Estado est Alterado  (Jogo mapa1dojogo (Jogador (x,y) dir tf))) = pictures (treatGame (Jogo mapa1dojogo (Jogador (x,y) dir tf)))
+drawEstado (Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (x,y) Este False))) = pictures (treatGame (Jogo mapa1dojogo (Jogador (x,y) Este False)))
+drawEstado (Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2)  (Jogo mapa2dojogo (Jogador (x,y) Este False))) = pictures (treatGame (Jogo mapa2dojogo  (Jogador (x,y) Este False)))
 
 reageEvento :: Event -> Estado -> Estado
+
 -- Menu Principal
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False)))  = Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False)))  = Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+
 -- Menu Escolher Mapa
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyLeft ) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (2,3) Este False))
+reageEvento (EventKey (SpecialKey KeyLeft ) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (2,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))
@@ -113,27 +129,39 @@ reageEvento (EventKey (Char 'f') Down _ _)  (Estado (OpcaoEscolherMapa Mapa2) Na
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))                      
 -- Começar Jogo Opção NovoJogo 
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado OpcaoNovojogo (Play Mapa1)  (Jogo mapa1dojogo (Jogador (3,3) Este False))
+-- Começar Jogo Opção Escolher Mapa
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (2,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (2,3) Este False))
+
 -- | Movimentos
 --Andar Esquerda 
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) =  Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda)
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) dir tf))) =  Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda)
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) =  Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda)
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf))) =  Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda)
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) dir tf))) =  Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste tf)) AndarEsquerda)
 -- Andar Direita
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) =  Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) AndarDireita )
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) dir tf))) =  Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) AndarDireita)
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) =  Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) AndarDireita )
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf))) =  Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este tf)) AndarDireita )
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) dir tf))) =  Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este tf)) AndarDireita)
 -- Trepar
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) Trepar)
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Este tf))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) Trepar)
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) Trepar)
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Oeste tf))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este tf))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste tf))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) Trepar)
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste tf))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste tf)) Trepar)
 -- Interage Caixa
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este False))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este False)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Este False))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este False)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este True))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este True)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Este True))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este True)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste False))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Oeste False))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste True))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste True)) InterageCaixa)
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado OpcaoNovojogo Alterado (Jogo mapa1dojogo (Jogador (x,y) Oeste True))) = Estado OpcaoNovojogo Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este False))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este False))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este False))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este True))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este True))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este True))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste False))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste False))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste False))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste False)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste True))) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste True))) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste True)) InterageCaixa)
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste True))) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste True)) InterageCaixa)
 reageEvento _ s = s 
 
 
@@ -169,7 +197,8 @@ drawMap (h:t) (Jogador (x,y) d tf) a b  (cx,cy)
 
 
 reageTempo :: Float -> Estado -> Estado
-reageTempo n s = s
+reageTempo n s | giveWin s = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+               | otherwise = s 
 
 main :: IO ()
 main = play window background fr
