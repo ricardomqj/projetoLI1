@@ -61,6 +61,27 @@ textEsc = color white (Translate (-230) (-110) (scale 0.5 0.5 (Text "Escolher Ma
 textControlos :: Picture 
 textControlos = color white (Translate (-210) (-320) (scale 0.5 0.5 (Text "Ver Controlos")))
 
+-- | Menu dos Controlos 
+
+infoControlos :: Picture 
+infoControlos = pictures [backgroundControlos, btnAndarSimbols, andarSimbols, setasExpl, titleControlos]
+
+andarSimbols :: Picture 
+andarSimbols = Translate (-800) 180 $ Scale 0.5 0.5 $ Color white $ Text "< >"
+
+btnAndarSimbols :: Picture      
+btnAndarSimbols = Translate (-730) 200 $ Color blue $ rectangleSolid 150 100
+
+setasExpl :: Picture 
+setasExpl = Translate (-630) 190 $ Scale 0.2 0.2 $ Color white $ Text "Utilize as setas direita e esquerda, para deslocar o personagem para este ou oeste, respetivamente."
+
+backgroundControlos :: Picture
+backgroundControlos = Color azure $ rectangleSolid 2000 2000
+
+titleControlos :: Picture 
+titleControlos = Translate (-450) 350 $ Color black $ Scale 1.5 1.5 $ Text "Controlos"
+
+
 -- | Nome das barras dos mapas e botão voltar
 
 textMapa1 :: Picture 
@@ -142,10 +163,7 @@ escolherMapa6 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue map
 escolherVoltar :: Picture 
 escolherVoltar = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue btnVoltar, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6, btnVoltar, textVoltar]
 
--- | Pictures 
 
-infoControlos :: Picture 
-infoControlos = pictures [textMapa1, textMapa2]
 
 -- | Menu "Ganhou"
 
@@ -220,6 +238,10 @@ reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Nada (J
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoControlos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoControlos Info1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 
+-- | Menu Controlos 
+
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoControlos Info1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoControlos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+
 -- | Menu Escolher Mapa
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))
@@ -251,6 +273,7 @@ reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nad
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))                      
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) (Play Mapa1) (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 -- | Começar Jogo Opção NovoJogo 
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado OpcaoNovojogo (Play Mapa1)  (Jogo mapa1dojogo (Jogador (3,3) Este False))
 -- | Começar Jogo Opção Escolher Mapa
