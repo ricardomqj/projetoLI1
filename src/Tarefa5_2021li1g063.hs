@@ -18,17 +18,23 @@ data Estado = Estado { menu::Menu , game::Game ,  jogo::Jogo }
 
 data Game = Nada | Play Mapas | Alterado 
              
-data Menu = OpcaoNovojogo | OpcaoContinuar | OpcaoEscolherMapa Mapas | Win | OpcaoInfos Info
+data Menu = OpcaoNovojogo | OpcaoContinuar | OpcaoEscolherMapa Mapas | Win | OpcaoInfos Info | VerControlos Controlos | VerRegras Regras | VerCreditos Creditos
 
 data Mapas = Mapa1 | Mapa2 | Mapa3 | Mapa4 | Mapa5 | Mapa6 | Voltar | SemMapa
 
-data Info = InfoControlos MenuControlos | InfoRegras MenuRegras | InfoCreditos MenuCreditos | NoInfo 
+data Info = InfoControlos | InfoRegras | InfoCreditos | NoInfo 
 
 data MenuControlos = ControlosInfo | NoControlos 
 
 data MenuRegras = RegrasInfo | NoRegras 
 
 data MenuCreditos = CreditosInfo | NoCreditos 
+
+data Controlos = ShowControlos | SemControlos
+
+data Regras = ShowRegras | SemRegras 
+
+data Creditos = ShowCreditos | SemCreditos    
 
 window :: Display 
 --window = InWindow "Jogo" (1280,720) (0,0) 
@@ -43,9 +49,13 @@ fr = 50
 estadoInicial:: Estado  
 estadoInicial = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 
--- | Barras de Opção no Menu principal
+-- | Menu principal
+
+mainTitle :: Picture
+mainTitle = Translate (-450) 350 $ Scale 1.3 1.3 $ Color black $ Text "Block Dude" 
+
 barraOpcaoCont :: Picture
-barraOpcaoCont = Translate 0 100 (rectangleSolid 500 150) 
+barraOpcaoCont = Translate 0 0 (rectangleSolid 500 150) 
 
 barraOpcaoNov :: Picture
 barraOpcaoNov = Translate 0 200 (barraOpcaoCont)
@@ -56,18 +66,29 @@ barraOpcaoEsc = Translate 0 (-200) (barraOpcaoCont)
 barraInformacoes :: Picture 
 barraInformacoes = Translate 0 (-400) (barraOpcaoCont)
 
--- | Nome das barras 
 textCont :: Picture 
-textCont = color white (Translate (-150) (80) (scale 0.5 0.5 (Text "Continuar"))) 
+textCont = color white (Translate (-150) (-20) (scale 0.5 0.5 (Text "Continuar"))) 
 
 textNov :: Picture 
-textNov = color white (Translate (-150) 290 (scale 0.5 0.5 (Text "Novo Jogo")))
+textNov = color white (Translate (-150) 190 (scale 0.5 0.5 (Text "Novo Jogo")))
 
 textEsc :: Picture 
-textEsc = color white (Translate (-230) (-110) (scale 0.5 0.5 (Text "Escolher Mapa")))
+textEsc = color white (Translate (-230) (-210) (scale 0.5 0.5 (Text "Escolher Mapa")))
 
-textControlos :: Picture 
-textControlos = color white (Translate (-210) (-320) (scale 0.5 0.5 (Text "Ver Controlos")))
+textInformacoes :: Picture 
+textInformacoes = color white (Translate (-170) (-420) (scale 0.5 0.5 (Text "Informacoes")))
+
+menuInicialNov:: Picture 
+menuInicialNov = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc, barraInformacoes,color blue barraOpcaoNov,textCont,textNov,textEsc,textInformacoes, mainTitle] 
+
+menuInicialCont:: Picture 
+menuInicialCont = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc,barraInformacoes,color blue barraOpcaoCont,textCont,textEsc,textNov,textInformacoes, mainTitle] 
+
+menuInicialEsc:: Picture 
+menuInicialEsc = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc,barraInformacoes,color blue barraOpcaoEsc,textCont,textEsc,textNov,textInformacoes, mainTitle] 
+
+menuInicialInfos :: Picture 
+menuInicialInfos = pictures [barraOpcaoCont, barraOpcaoNov, barraOpcaoEsc,barraInformacoes,color blue barraInformacoes,textCont,textEsc,textNov,textInformacoes, mainTitle]
 
 
 -- | Menu das Infos
@@ -99,12 +120,20 @@ textBarraRegras = Translate (-200) (-120) $ Color white $ Scale 0.4 0.4 $ Text "
 textBarraCreditos :: Picture 
 textBarraCreditos = Translate (-170) (-330) $ Color white $ Scale 0.7 0.7 $ Text "Creditos"
 
-{-
+escolherInfoControlos :: Picture 
+escolherInfoControlos = pictures [backgroundInfos, menuInfoTitle, barraControlos, barraRegras, barraCreditos, color blue barraControlos, textBarraControlos, textBarraRegras, textBarraCreditos]
+
+escolherInfoRegras :: Picture 
+escolherInfoRegras = pictures [backgroundInfos, menuInfoTitle, barraRegras, barraControlos, barraCreditos, color blue barraRegras, textBarraControlos, textBarraRegras, textBarraCreditos]
+
+escolherInfoCreditos :: Picture 
+escolherInfoCreditos = pictures [backgroundInfos, menuInfoTitle, barraCreditos, barraControlos, barraRegras, color blue barraCreditos, textBarraCreditos, textBarraControlos, textBarraRegras]
 
 -- | Menu dos Controlos
 
-infoControlos :: Picture 
-infoControlos = pictures [backgroundControlos, btnAndarSimbols, andarSimbols, textAndar, titleControlos, btnTreparSimbols, treparSimbols, textTrepar, btnIntCaixa, intCaixaSimbols]
+
+menuControlosPic :: Picture 
+menuControlosPic = pictures [backgroundControlos, btnAndarSimbols, andarSimbols, textAndar, titleControlos, btnTreparSimbols, treparSimbols, textTrepar, btnIntCaixa, intCaixaSimbols, textIntCaixa, btnVoltarSimbols, voltarSimbols, textVoltarInfo]
 
 titleControlos :: Picture 
 titleControlos = Translate (-450) 300 $ Color black $ Scale 1.5 1.5 $ Text "Controlos"
@@ -134,26 +163,109 @@ btnIntCaixa :: Picture
 btnIntCaixa = Translate 0 (-150) btnTreparSimbols
 
 intCaixaSimbols :: Picture 
-intCaixaSimbols = Translate (-750) (-180) $ Color white $ Scale 0.5 0.5 $ Text "v" 
+intCaixaSimbols = Translate (-740) (-150) $ Color white $ Scale 0.5 0.5 $ Text "v" 
 
+textIntCaixa :: Picture 
+textIntCaixa = Translate (-625) (-150) $ Color white $ Scale 0.3 0.3 $ Text "Pegar ou largar caixa"
 
--}
+btnVoltarSimbols :: Picture 
+btnVoltarSimbols = Translate 0 (-150) btnIntCaixa 
 
--- | Menu dos Controlos
+voltarSimbols :: Picture 
+voltarSimbols = Translate (-735) (-300) $ Scale 0.5 0.5 $ Color white $ Text "f"
 
-menuControlosPic :: Picture 
-menuControlosPic = undefined 
+textVoltarInfo :: Picture 
+textVoltarInfo = Translate (-625) (-300) $ Scale 0.3 0.3 $ Color white $ Text "Voltar para o menu anterior"
+
 
 -- | Menu das Regras 
 
 menuRegrasPic :: Picture 
-menuRegrasPic = undefined
+menuRegrasPic = pictures [backgroundControlos, titleRegras, regra1, p1, p2, regra2, regra2', p3, regra3, regra3', p4, regra4, p5, regra5, p6, regra6, regra6', p7, regra7, regra7', p8, regra8]
+
+titleRegras :: Picture 
+titleRegras = Translate (-280) 300 $ Scale 1.5 1.5 $ Color white $ Text "Regras"
+
+p1 :: Picture 
+p1 = Translate (-905) (160) $ circleSolid 6 
+
+regra1 :: Picture 
+regra1 = Translate (-890) 150 $ Scale 0.2 0.2 $ Color white $ Text "O objetivo deste jogo consiste em controlar uma personagem ate a porta de um mapa." 
+
+p2 :: Picture  
+p2 = Translate (-905) 100 $ circleSolid 6
+
+regra2 :: Picture 
+regra2 = Translate (-890) 90 $ Scale 0.2 0.2 $ Color white $ Text "Num mapa existem, para alem do personagem e da porta, blocos e caixas, sendo permitido ao jogador mover as caixas para conseguir"
+
+regra2' :: Picture 
+regra2' = Translate (-890) 60 $ Scale 0.2 0.2 $ Color white $ Text "chegar a porta."
+
+p3 :: Picture 
+p3 = Translate (-905) 30 $ circleSolid 6
+
+regra3 :: Picture 
+regra3 = Translate (-890) 20 $ Scale 0.2 0.2 $ Color white $ Text "Os unicos movimentos permitidos ao jogador sao de carregar ou largar uma caixa, avancar nas direcoes Este/Oeste e trepar um bloco"
+
+regra3' :: Picture 
+regra3' = Translate (-890) (-10) $ Scale 0.2 0.2 $ Color white $ Text "ou caixa."
+
+p4 :: Picture 
+p4 = Translate (-905) (-40) $ circleSolid 6
+
+regra4 :: Picture 
+regra4 = Translate (-890) (-50) $ Scale 0.2 0.2 $ Color white $ Text "O jogador pode avancar uma unidade numa certa direcao desde que esse espaco esteja livre de obstaculos."
+
+p5 :: Picture 
+p5 = Translate (-905) (-90) $ circleSolid 6
+
+regra5 :: Picture 
+regra5 = Translate (-890) (-100) $ Scale 0.2 0.2 $ Color white $ Text "O jogador apenas pode trepar um obstaculo que se encontre imediatamente a sua frente e sem outro obstaculo por cima."
+
+p6 :: Picture 
+p6 = Translate (-905) (-140) $ circleSolid 6
+
+regra6 :: Picture 
+regra6 = Translate (-890) (-150) $ Scale 0.2 0.2 $ Color white $ Text "Para carregar uma caixa, e necessario que a caixa esteja na posicao imediatamente a frente do personagem e que nao haja"
+
+regra6' :: Picture 
+regra6' = Translate (-890) (-185) $ Scale 0.2 0.2 $ Color white $ Text "nenhum outro obtaculo acima do personagem ou da caixa."
+
+p7 :: Picture 
+p7 = Translate (-905) (-215) $ circleSolid 6
+
+regra7 :: Picture 
+regra7 = Translate (-890) (-225) $ Scale 0.2 0.2 $ Color white $ Text "Se a frente do jogador existir um obstaculo, a caixa sera largada por cima deste, desde que o obstaculo esteja a altura do"
+
+regra7' :: Picture 
+regra7' = Translate (-890) (-260) $ Scale 0.2 0.2 $ Color white $ Text "jogador."
+
+p8 :: Picture 
+p8 = Translate (-905) (-295) $ circleSolid 6
+
+regra8 :: Picture 
+regra8 = Translate (-890) (-305) $ Scale 0.2 0.2 $ Color white $ Text "Em caso de queda eminente a caixa sera largada imediatamente para a ultima posicao de queda."
 
 -- | Menu dos Créditos
 
 menuCreditosPic :: Picture 
-menuCreditosPic = undefined 
+menuCreditosPic = pictures [backgroundControlos, titleCreditos, textCreditos1, textCreditos2, textCreditos3, textCreditos4]
 
+titleCreditos :: Picture 
+titleCreditos = Translate (-350) 300 $ Scale 1.5 1.5 $ Text "Creditos"
+
+textCreditos1 :: Picture 
+textCreditos1 = Translate (-900) (150) $ Scale 0.4 0.4 $ Color white $ Text "Jogo 'Block Dude', criado em Haskell no ambito da cadeira de" 
+
+textCreditos2 :: Picture 
+textCreditos2 = Translate (-900) (70) $ Scale 0.4 0.4 $ Color white $ Text "Laboratorios de Informatica I, na Licenciatura em Engenharia "
+
+textCreditos3 :: Picture 
+textCreditos3 = Translate (-900) (-10) $ Scale 0.4 0.4 $ Color white $ Text "Informatica na Univerdade do Minho."
+
+textCreditos4 :: Picture 
+textCreditos4 = Translate (-900) (-170) $ Scale 0.4 0.4 $ Color white $ Text "Feito por: Ricardo Jesus e Rui Pinto"
+ 
 -- | Nome das barras dos mapas e botão voltar
 
 textMapa1 :: Picture 
@@ -200,19 +312,6 @@ btnVoltar :: Picture
 btnVoltar = translate 0 (-420) (Polygon [(-150,75),(150,75),(150,-75),(-150,-75),(-150,75)])
 
 
--- | Pictures do Menu inicial
-menuInicialNov:: Picture 
-menuInicialNov = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc, barraInformacoes,color blue barraOpcaoNov,textCont,textNov,textEsc,textControlos] 
-
-menuInicialCont:: Picture 
-menuInicialCont = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc,barraInformacoes,color blue barraOpcaoCont,textCont,textEsc,textNov,textControlos] 
-
-menuInicialEsc:: Picture 
-menuInicialEsc = pictures [barraOpcaoCont,barraOpcaoNov,barraOpcaoEsc,barraInformacoes,color blue barraOpcaoEsc,textCont,textEsc,textNov,textControlos] 
-
-menuInicialInfos :: Picture 
-menuInicialInfos = pictures [barraOpcaoCont, barraOpcaoNov, barraOpcaoEsc,barraInformacoes,color blue barraInformacoes,textCont,textEsc,textNov,textControlos]
-
 -- | Pictures do Escolher Mapa
 escolherMapa1:: Picture 
 escolherMapa1 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue mapa1, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6, btnVoltar, textVoltar]
@@ -233,7 +332,7 @@ escolherMapa6::Picture
 escolherMapa6 = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue mapa6, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6, btnVoltar, textVoltar]
 
 escolherVoltar :: Picture 
-escolherVoltar = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, color blue btnVoltar, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6, btnVoltar, textVoltar]
+escolherVoltar = pictures [mapa1,mapa2,mapa3, mapa4, mapa5, mapa6, btnVoltar, color blue btnVoltar, textMapa1, textMapa2, textMapa3, textMapa4, textMapa5, textMapa6, textVoltar]
 
 
 
@@ -264,8 +363,9 @@ playMapa6 = pictures (treatGame (Jogo mapa6dojogo (Jogador (3,3) Este False)))
 
 
 giveWin::Estado -> Bool
-giveWin (Estado opc  est   (Jogo m (Jogador cord dir tf))) | cord == snd (head(filter ((== Porta).fst) (desconstroiMapa m))) =  True
+giveWin (Estado opc  est   (Jogo m (Jogador cord dir tf))) | cord == snd (head (filter ((== Porta).fst) (desconstroiMapa m))) =  True
                                                            | otherwise = False
+
 
 
 drawEstado::Estado -> Picture
@@ -274,6 +374,7 @@ drawEstado (Estado Win Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = me
 -- | Opções dos Menus
 drawEstado (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialNov 
 drawEstado (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialCont 
+drawEstado (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialInfos
 drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialEsc 
 drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherMapa1
 drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada  (Jogo mapa2dojogo (Jogador (3,3) Este False))) = escolherMapa2
@@ -281,16 +382,19 @@ drawEstado (Estado (OpcaoEscolherMapa Mapa3) Nada  (Jogo mapa3dojogo (Jogador (3
 drawEstado (Estado (OpcaoEscolherMapa Mapa4) Nada  (Jogo mapa4dojogo (Jogador (3,3) Este False))) = escolherMapa4
 drawEstado (Estado (OpcaoEscolherMapa Mapa5) Nada  (Jogo mapa5dojogo (Jogador (3,3) Este False))) = escolherMapa5
 drawEstado (Estado (OpcaoEscolherMapa Mapa6) Nada  (Jogo mapa6dojogo (Jogador (3,3) Este False))) = escolherMapa6
---drawEstado (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherVoltar
+drawEstado (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherVoltar
 
 -- | Menus das informações
-drawEstado (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInicialInfos
-drawEstado (Estado (OpcaoInfos (InfoControlos NoControlos)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInfosPic
-drawEstado (Estado (OpcaoInfos (InfoRegras NoRegras)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInfosPic 
-drawEstado (Estado (OpcaoInfos (InfoCreditos NoCreditos)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuInfosPic
-drawEstado (Estado (OpcaoInfos (InfoControlos ControlosInfo)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuControlosPic
-drawEstado (Estado (OpcaoInfos (InfoRegras RegrasInfo)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuRegrasPic
-drawEstado (Estado (OpcaoInfos (InfoCreditos CreditosInfo)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuCreditosPic
+drawEstado (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoControlos 
+drawEstado (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoRegras 
+drawEstado (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoCreditos
+drawEstado (Estado (VerControlos SemControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoControlos 
+drawEstado (Estado (VerRegras SemRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoRegras
+drawEstado (Estado (VerCreditos SemCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = escolherInfoCreditos
+drawEstado (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuControlosPic 
+drawEstado (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuRegrasPic 
+drawEstado (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = menuCreditosPic 
+
 
 -- | Desenhar Mapas 
 drawEstado (Estado est (Play Mapa1)  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = playMapa1 
@@ -314,23 +418,40 @@ reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos NoInfo) N
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos (InfoControlos NoControlos)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 -- | Menu das Informações
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos (InfoControlos NoControlos)) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False)) 
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada  (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 -- | Menu Escolher Mapa
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False)) 
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (3,3) Este False))
 reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (3,3) Este False))) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (3,3) Este False))
