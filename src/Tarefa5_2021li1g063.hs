@@ -48,7 +48,7 @@ fr :: Int
 fr = 50 
 
 estadoInicial :: [Picture] -> Estado  
-estadoInicial i = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i 
+estadoInicial i = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i 
 
 -- | Menu principal
 
@@ -176,7 +176,7 @@ voltarSimbols :: Picture
 voltarSimbols = Translate (-735) (-300) $ Scale 0.5 0.5 $ Color white $ Text "f"
 
 textVoltarInfo :: Picture 
-textVoltarInfo = Translate (-625) (-300) $ Scale 0.3 0.3 $ Color white $ Text "Voltar para o menu anterior"
+textVoltarInfo = Translate (-625) (-300) $ Scale 0.3 0.3 $ Color white $ Text "Voltar para o menu anterior/Sair do mapa"
 
 
 -- | Menu das Regras 
@@ -345,22 +345,22 @@ mensWin = Text "Win"
 -- | Pictures Mapas
 
 playMapa1 :: [Picture] -> Picture  
-playMapa1 i = pictures (treatGame i (Jogo mapa1dojogo  (Jogador (11,10) Oeste False)))
+playMapa1 i = pictures (treatGame i (Jogo mapa1dojogo (Jogador (10,10) Oeste False)))
 
 playMapa2 :: [Picture] -> Picture 
-playMapa2 i = pictures (treatGame i (Jogo mapa2dojogo (Jogador (11,10) Oeste False)))
+playMapa2 i = pictures (treatGame i (Jogo mapa2dojogo (Jogador (8,10) Oeste False)))
 
 playMapa3 :: [Picture] -> Picture 
-playMapa3  i= pictures (treatGame i (Jogo mapa3dojogo (Jogador (11,10) Oeste False)))
-
+playMapa3 i = pictures (treatGame i (Jogo mapa3dojogo (Jogador (11,10) Oeste False)))
+ 
 playMapa4 :: [Picture] -> Picture 
-playMapa4  i = pictures (treatGame i (Jogo mapa4dojogo (Jogador (11,10) Oeste False)))
+playMapa4  i = pictures (treatGame i (Jogo mapa4dojogo (Jogador (3,9) Oeste False)))
 
 playMapa5 :: [Picture] ->Picture 
-playMapa5 i = pictures (treatGame i (Jogo mapa5dojogo (Jogador (11,10) Oeste False)))
+playMapa5 i = pictures (treatGame i (Jogo mapa5dojogo (Jogador (16,8) Oeste False)))
 
 playMapa6 :: [Picture] -> Picture 
-playMapa6 i = pictures (treatGame i (Jogo mapa6dojogo (Jogador (11,10) Oeste False)))
+playMapa6 i = pictures (treatGame i (Jogo mapa6dojogo (Jogador (14,7) Oeste False)))
 
 
 giveWin::Estado -> Bool
@@ -370,40 +370,40 @@ giveWin (Estado opc  est   (Jogo m (Jogador cord dir tf)) _) | cord == snd (head
 
 drawEstado :: Estado -> Picture
 -- | Mensagem Win
-drawEstado (Estado Win Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuInicialNov
+drawEstado (Estado Win Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = menuInicialNov
 -- | Opções dos Menus
-drawEstado (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuInicialNov 
-drawEstado (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuInicialCont 
-drawEstado (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuInicialInfos
-drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuInicialEsc 
-drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa1
-drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada  (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa2
+drawEstado (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = menuInicialNov 
+drawEstado (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = menuInicialCont 
+drawEstado (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = menuInicialInfos
+drawEstado (Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = menuInicialEsc 
+drawEstado (Estado (OpcaoEscolherMapa Mapa1) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherMapa1
+drawEstado (Estado (OpcaoEscolherMapa Mapa2) Nada  (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) _) = escolherMapa2
 drawEstado (Estado (OpcaoEscolherMapa Mapa3) Nada  (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa3
-drawEstado (Estado (OpcaoEscolherMapa Mapa4) Nada  (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa4
-drawEstado (Estado (OpcaoEscolherMapa Mapa5) Nada  (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa5
-drawEstado (Estado (OpcaoEscolherMapa Mapa6) Nada  (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) _) = escolherMapa6
-drawEstado (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherVoltar
+drawEstado (Estado (OpcaoEscolherMapa Mapa4) Nada  (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) _) = escolherMapa4
+drawEstado (Estado (OpcaoEscolherMapa Mapa5) Nada  (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) _) = escolherMapa5
+drawEstado (Estado (OpcaoEscolherMapa Mapa6) Nada  (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) _) = escolherMapa6
+drawEstado (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherVoltar
 
 -- | Menus das informações
-drawEstado (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoControlos 
-drawEstado (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoRegras 
-drawEstado (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoCreditos
-drawEstado (Estado (VerControlos SemControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoControlos 
-drawEstado (Estado (VerRegras SemRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoRegras
-drawEstado (Estado (VerCreditos SemCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = escolherInfoCreditos
-drawEstado (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuControlosPic 
-drawEstado (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuRegrasPic 
-drawEstado (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) _) = menuCreditosPic 
+drawEstado (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoControlos 
+drawEstado (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoRegras 
+drawEstado (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoCreditos
+drawEstado (Estado (VerControlos SemControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoControlos 
+drawEstado (Estado (VerRegras SemRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoRegras
+drawEstado (Estado (VerCreditos SemCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = escolherInfoCreditos
+drawEstado (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = menuControlosPic 
+drawEstado (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = menuRegrasPic 
+drawEstado (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) _) = menuCreditosPic 
 
 
 -- | Desenhar Mapas 
  
-drawEstado (Estado est (Play Mapa1)  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = playMapa1 i
-drawEstado (Estado est (Play Mapa2)  (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = playMapa2 i
+drawEstado (Estado est (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = playMapa1 i
+drawEstado (Estado est (Play Mapa2)  (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = playMapa2 i
 drawEstado (Estado est (Play Mapa3)  (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = playMapa3 i
-drawEstado (Estado est (Play Mapa4)  (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = playMapa4 i 
-drawEstado (Estado est (Play Mapa5)  (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = playMapa5 i 
-drawEstado (Estado est (Play Mapa6)  (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = playMapa6 i 
+drawEstado (Estado est (Play Mapa4)  (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = playMapa4 i 
+drawEstado (Estado est (Play Mapa5)  (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = playMapa5 i 
+drawEstado (Estado est (Play Mapa6)  (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = playMapa6 i 
 drawEstado (Estado est Alterado  (Jogo mapa1dojogo (Jogador (x,y) dir tf)) i) = pictures (treatGame i (Jogo mapa1dojogo (Jogador (x,y) dir tf)))
 drawEstado (Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) i) = pictures (treatGame i (Jogo mapa1dojogo (Jogador (x,y) Oeste False)))
 drawEstado (Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2)  (Jogo mapa2dojogo (Jogador (x,y) Oeste False)) i) = pictures (treatGame i (Jogo mapa2dojogo  (Jogador (x,y) Oeste False)))
@@ -415,111 +415,170 @@ drawEstado (Estado (OpcaoEscolherMapa Mapa6) (Play Mapa6)  (Jogo mapa6dojogo (Jo
 reageEvento :: Event -> Estado -> Estado
 
 -- | Menu Principal
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i)  = Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i)  = Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado OpcaoContinuar Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado OpcaoContinuar Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
 -- | Menu das Informações
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Este False)) i 
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos NoInfo) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerControlos ShowControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoControlos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerRegras ShowRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoRegras) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoInfos InfoCreditos) Nada (Jogo mapa1dojogo (Jogador (11,10) Este False)) i 
 -- | Menu Escolher Mapa
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _)  (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i                    
-reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) (Play Mapa1) (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Voltar) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _)  (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i                    
+reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) (Play Mapa1) (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
 -- | Começar Jogo Opção NovoJogo 
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado OpcaoNovojogo (Play Mapa1)  (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado OpcaoNovojogo (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
 -- | Começar Jogo Opção Escolher Mapa
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (11,10) Oeste False)) i 
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i 
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) (Play Mapa3) (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
 reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa3) (Play Mapa3) (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i
-reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (11,10) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (11,10) Este False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa5) Nada (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nada (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i) = Estado (OpcaoEscolherMapa Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (11,10) Este False)) i
+-- | Dentro dos mapas
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa1dojogo (Jogador (10,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa2dojogo (Jogador (8,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa3dojogo (Jogador (11,10) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa5dojogo (Jogador (16,8) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+reageEvento (EventKey (Char 'f') Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) i) = Estado OpcaoNovojogo Nada  (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i
+
+
 -- | Movimentos
 --Andar Esquerda 
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
-reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) dir tf)) i) =  Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste tf)) AndarEsquerda) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i                 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i                 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) AndarEsquerda) i 
+reageEvento (EventKey (SpecialKey KeyLeft) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) dir tf)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste tf)) AndarEsquerda) i
 -- Andar Direita
 reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
 reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
+reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) i) =  Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Este tf)) AndarDireita ) i
 reageEvento (EventKey (SpecialKey KeyRight) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) dir tf)) i) =  Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este tf)) AndarDireita) i
 -- Trepar
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este tf)) Trepar) i
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Este tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Este tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Este tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Este tf)) Trepar) i
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este tf)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este tf)) Trepar) i
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste tf)) Trepar) i
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Oeste tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Oeste tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Oeste tf)) Trepar) i
+reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Oeste tf)) Trepar) i
 reageEvento (EventKey (SpecialKey KeyUp) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste tf)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste tf)) Trepar) i
 -- Interage Caixa
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Este False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Este False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Este False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Este False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este False)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Este True)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Este True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Este True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Este True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Este True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Este True)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Este True)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Este True)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Oeste False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste False)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste False)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa1) (Jogo mapa1dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa1dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa2) (Jogo mapa2dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa2dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa3) (Jogo mapa3dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa3dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa4) (Jogo mapa4dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa4dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa5) (Jogo mapa5dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa5dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
+reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est (Play Mapa6) (Jogo mapa6dojogo (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mapa6dojogo (Jogador (x,y) Oeste True)) InterageCaixa) i
 reageEvento (EventKey (SpecialKey KeyDown ) Down _ _) (Estado est Alterado (Jogo mp (Jogador (x,y) Oeste True)) i) = Estado est Alterado (moveJogador (Jogo mp (Jogador (x,y) Oeste True)) InterageCaixa) i
 reageEvento _ s = s 
 
@@ -530,7 +589,7 @@ playGame (Estado OpcaoNovojogo Alterado (Jogo m (Jogador (x,y) dir tf))) = pictu
 -}
 
 treatGame :: [Picture] -> Jogo -> [Picture]
-treatGame (i:is) j = transf (i:is) j (-450,450) (0,0)
+treatGame (i:is) j = transf (i:is) j (-200,200) (0,0)
 
 transf::[Picture] -> Jogo -> (Float,Float) -> (Int,Int) -> [Picture]
 transf (i:is) (Jogo [] _ ) _  _ = []
@@ -561,9 +620,9 @@ drawMap i (h:t) (Jogador (x,y) d tf) a b  (cx,cy)
 reageTempo :: Float -> Estado -> Estado
 reageTempo n (Estado OpcaoNovojogo gam (Jogo m jogd ) i )
                          | giveWin (Estado OpcaoNovojogo gam (Jogo m jogd ) i )  &&  m == mapa1dojogo = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (2,3) Este False)) i  -- TRATAR DO MAPA!!
-                         | giveWin (Estado OpcaoNovojogo gam (Jogo m jogd ) i) &&  m == mapa2dojogo = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (3,3) Este False)) i
+                         | giveWin (Estado OpcaoNovojogo gam (Jogo m jogd ) i) &&  m == mapa2dojogo = Estado OpcaoNovojogo Nada (Jogo mapa1dojogo (Jogador (10,11) Este False)) i
 reageTempo n (Estado (OpcaoEscolherMapa mp) gam (Jogo m jogd) i ) 
-                         | giveWin (Estado (OpcaoEscolherMapa mp) gam (Jogo m jogd)i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (3,3) Este False)) i                       
+                         | giveWin (Estado (OpcaoEscolherMapa mp) gam (Jogo m jogd)i) = Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,11) Este False)) i                       
 reageTempo _ s = s
 
 
@@ -572,15 +631,16 @@ reageTempo _ s = s
 main :: IO ()
 main = do 
       Just bloco     <- loadJuicy "img/bloco.png" 
-      Just porta     <- loadJuicy "img/porta.png"
+      Just porta     <- loadJuicy "img/portal.png"
       Just caixa     <- loadJuicy "img/caixa.png"
       Just playeresq <- loadJuicy "img/playeresq.png"
       Just playerdir <- loadJuicy "img/playerdir.png"
+      Just mainbackg <- loadJuicy "img/spacebackground.png"
       play window background fr (estadoInicial [bloco,porta,caixa,playeresq,playerdir]) drawEstado reageEvento reageTempo 
 
-
-mapa1dojogo :: Mapa 
-mapa1dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
+-- (10,10)
+mapa3dojogo :: Mapa 
+mapa3dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
@@ -593,6 +653,7 @@ mapa1dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, B
                [Porta, Vazio, Bloco, Vazio, Caixa, Caixa, Bloco, Vazio, Vazio, Bloco, Caixa, Vazio],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
 
+-- (8,10)
 mapa2dojogo :: Mapa 
 mapa2dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
@@ -607,8 +668,10 @@ mapa2dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, B
                [Bloco, Vazio, Vazio, Caixa, Bloco, Vazio, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
 
-mapa3dojogo :: Mapa 
-mapa3dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
+
+-- (11,10)
+mapa1dojogo :: Mapa 
+mapa1dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
@@ -621,6 +684,7 @@ mapa3dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, B
                [Bloco, Vazio, Bloco, Bloco, Vazio, Bloco, Vazio, Bloco, Vazio, Bloco, Vazio, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
 
+-- (3,10)
 mapa4dojogo :: Mapa
 mapa4dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
@@ -634,6 +698,8 @@ mapa4dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, B
                [Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Vazio, Bloco, Porta],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
 
+
+-- (16,8)
 mapa5dojogo :: Mapa
 mapa5dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Vazio, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Bloco, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco],
@@ -649,22 +715,21 @@ mapa5dojogo = [[Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, B
                [Bloco, Bloco, Bloco, Vazio, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
                [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
 
+-- (14,7)
 mapa6dojogo :: Mapa 
-mapa6dojogo = [[Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Vazio, Vazio],
-               [Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio],
-               [Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Bloco],
-               [Bloco, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Bloco, Vazio, Vazio, Bloco],
-               [Bloco, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Porta, Vazio, Bloco],
-               [Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Bloco],
-               [Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Caixa, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Caixa, Caixa, Bloco, Vazio, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Vazio, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco],
-               [Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
-               [Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco]]
+mapa6dojogo = [[Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
+               [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio],
+               [Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco, Bloco],
+               [Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco],
+               [Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco],
+               [Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Caixa, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Bloco],
+               [Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Caixa, Caixa, Bloco],
+               [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco],
+               [Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Vazio, Vazio, Vazio, Vazio, Bloco],
+               [Bloco, Porta, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco],
+               [Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Caixa, Bloco],
+               [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Caixa, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco],
+               [Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Bloco, Vazio, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio],
+               [Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio],
+               [Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio],
+               [Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio]]
