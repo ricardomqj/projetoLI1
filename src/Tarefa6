@@ -16,7 +16,9 @@ data RTree a = R a [RTree a]
  
 
 resolveJogo :: Int -> Jogo -> Maybe [Movimento]
-resolveJogo n jogo = testPatchs (paths (inicRtMov n)) jogo 
+resolveJogo 0 jogo | daWin jogo = Just [] 
+                   | otherwise = Nothing                     
+resolveJogo n (Jogo mp (Jogador coord dir tf)) = testPatchs (paths (inicRtMov n dir)) (Jogo mp (Jogador coord dir tf)) 
 
 testPatchs:: [[Movimento]] -> Jogo -> Maybe [Movimento]
 testPatchs [] jog = Nothing 
@@ -44,12 +46,13 @@ daWin (Jogo mp (Jogador coord dir tf))  | coord == snd (head(filter ((== Porta).
                                         | otherwise = False
 
 
-inicRtMov:: Int -> RTree  Movimento  
-inicRtMov n = R AndarEsquerda [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita, criaRtMov (n-1) InterageCaixa]
+inicRtMov:: Int ->  Direcao -> RTree  Movimento  
+inicRtMov n dr = R AndarEsquerda [criaRtMov dr (n-1) AndarEsquerda, criaRtMov dr (n-1) Trepar , criaRtMov dr (n-1) AndarDireita, criaRtMov dr (n-1) InterageCaixa]
 
-criaRtMov:: Int -> Movimento -> RTree Movimento
-criaRtMov 1 mov = R mov [] 
-criaRtMov n AndarDireita = R AndarDireita [criaRtMov (n-1) AndarDireita, criaRtMov (n-1) Trepar , criaRtMov (n-1) InterageCaixa]
-criaRtMov n AndarEsquerda  = R AndarEsquerda  [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) InterageCaixa]
-criaRtMov n InterageCaixa   = R InterageCaixa   [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita ]
-criaRtMov n Trepar  = R Trepar  [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita, criaRtMov (n-1) InterageCaixa]    -- NAO ESQUECER CASOS EM QUE TREPA HÁ 2 POSSIBLIDADES
+criaRtMov::Direcao -> Int -> Movimento -> RTree Movimento
+criaRtMov dr 1 mov = R mov [] 
+criaRtMov dr n AndarDireita = R AndarDireita [criaRtMov Este (n-1) AndarDireita, criaRtMov Este (n-1) Trepar , criaRtMov Este (n-1) InterageCaixa]
+criaRtMov dr n AndarEsquerda  = R AndarEsquerda  [criaRtMov Oeste (n-1) AndarEsquerda, criaRtMov Oeste (n-1) Trepar , criaRtMov Oeste (n-1) InterageCaixa]
+criaRtMov dr n InterageCaixa   = R InterageCaixa   [criaRtMov dr (n-1) AndarEsquerda, criaRtMov dr (n-1) Trepar , criaRtMov dr (n-1) AndarDireita ]
+criaRtMov Este n Trepar  = R Trepar  [criaRtMov Este (n-1) Trepar , criaRtMov Este (n-1) AndarDireita, criaRtMov Este (n-1) InterageCaixa]  
+criaRtMov Oeste n Trepar  = R Trepar  [criaRtMov Oeste (n-1) AndarEsquerda, criaRtMov Oeste (n-1) Trepar , criaRtMov Oeste (n-1) InterageCaixa]  
