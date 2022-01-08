@@ -1,0 +1,55 @@
+{- |
+Module      : Tarefa6_2021li1gXXX
+Description : Resolução de um puzzle
+
+Módulo para a realização da Tarefa 6 do projeto de LI1 em 2021/22.
+-}
+module Tarefa6_2021li1gXXX where
+
+import LI12122
+import Outro 
+import Tarefa4_2021li1g063 (moveJogador, correrMovimentos)
+import Tarefa2_2021li1g063 (desconstroiMapa)
+
+data RTree a = R a [RTree a]
+   deriving (Show)
+ 
+
+resolveJogo :: Int -> Jogo -> Maybe [Movimento]
+resolveJogo n jogo = testPatchs (paths (inicRtMov n)) jogo 
+
+testPatchs:: [[Movimento]] -> Jogo -> Maybe [Movimento]
+testPatchs [] jog = Nothing 
+testPatchs (h:t) (Jogo mp (Jogador coord dir tf)) 
+                     | daWin (correrMovimentos (Jogo mp (Jogador coord dir tf)) h) = Just h 
+                     | otherwise  = testPatchs t (Jogo mp (Jogador coord dir tf))
+
+
+paths::RTree a -> [[a]]
+paths rt = listRTree [] rt 
+
+listRTree:: [a] -> RTree a -> [[a]]
+listRTree l (R a []) = [l ++ [a]]
+listRTree l (R a rs) = concat (map (listRTree (l ++ [a])) rs)
+
+
+
+extractPath:: RTree Movimento -> [[Movimento]]
+extractPath (R  mov []) = [[mov]]
+extractPath (R mov l) = map ((:) mov . concat  . extractPath) l 
+                                                                                      
+
+daWin::Jogo -> Bool
+daWin (Jogo mp (Jogador coord dir tf))  | coord == snd (head(filter ((== Porta).fst) (desconstroiMapa mp))) =  True
+                                        | otherwise = False
+
+
+inicRtMov:: Int -> RTree  Movimento  
+inicRtMov n = R AndarEsquerda [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita, criaRtMov (n-1) InterageCaixa]
+
+criaRtMov:: Int -> Movimento -> RTree Movimento
+criaRtMov 1 mov = R mov [] 
+criaRtMov n AndarDireita = R AndarDireita [criaRtMov (n-1) AndarDireita, criaRtMov (n-1) Trepar , criaRtMov (n-1) InterageCaixa]
+criaRtMov n AndarEsquerda  = R AndarEsquerda  [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) InterageCaixa]
+criaRtMov n InterageCaixa   = R InterageCaixa   [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita ]
+criaRtMov n Trepar  = R Trepar  [criaRtMov (n-1) AndarEsquerda, criaRtMov (n-1) Trepar , criaRtMov (n-1) AndarDireita, criaRtMov (n-1) InterageCaixa]    -- NAO ESQUECER CASOS EM QUE TREPA HÁ 2 POSSIBLIDADES
