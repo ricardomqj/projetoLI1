@@ -1,0 +1,61 @@
+2021li1g063-0.1.0.0: unregistering (local file changes: 2021li1g063.cabal src/LI12122.hs src/Tarefa1_2021li1g063.hs src/Tarefa2_2021li1g063.hs src/Tarefa...)
+2021li1g063> configure (lib)
+Configuring 2021li1g063-0.1.0.0...
+2021li1g063> build (lib)
+Preprocessing library for 2021li1g063-0.1.0.0..
+Building library for 2021li1g063-0.1.0.0..
+[1 of 5] Compiling LI12122
+[2 of 5] Compiling Tarefa2_2021li1g063
+[3 of 5] Compiling Tarefa1_2021li1g063
+[4 of 5] Compiling Tarefa3_2021li1g063
+[5 of 5] Compiling Tarefa4_2021li1g063
+2021li1g063> haddock
+Preprocessing library for 2021li1g063-0.1.0.0..
+Running Haddock on library for 2021li1g063-0.1.0.0..
+Haddock coverage:
+  92% ( 11 / 12) in 'LI12122'
+  Missing documentation for:
+    Mapa (src/LI12122.hs:28)
+  69% (  9 / 13) in 'Tarefa2_2021li1g063'
+  Missing documentation for:
+    procuraPecaCoord (src/Tarefa2_2021li1g063.hs:60)
+    criaListadePecas (src/Tarefa2_2021li1g063.hs:73)
+    encontrarXpeca (src/Tarefa2_2021li1g063.hs:82)
+    aux (src/Tarefa2_2021li1g063.hs:93)
+  35% (  6 / 17) in 'Tarefa1_2021li1g063'
+  Missing documentation for:
+    validaposicoes (src/Tarefa1_2021li1g063.hs:43)
+    numPortas (src/Tarefa1_2021li1g063.hs:58)
+    soUmaPorta (src/Tarefa1_2021li1g063.hs:65)
+    procuraCaixa (src/Tarefa1_2021li1g063.hs:84)
+    vereficardebaixo (src/Tarefa1_2021li1g063.hs:92)
+    procurarVazio (src/Tarefa1_2021li1g063.hs:124)
+    tamanhodoMapa (src/Tarefa1_2021li1g063.hs:132)
+    maiorelementodaLista (src/Tarefa1_2021li1g063.hs:139)
+    encontraBlocoX (src/Tarefa1_2021li1g063.hs:158)
+    continuacaoDoChao (src/Tarefa1_2021li1g063.hs:165)
+    continuacaoPorCima (src/Tarefa1_2021li1g063.hs:176)
+  88% (  7 /  8) in 'Tarefa3_2021li1g063'
+  Missing documentation for:
+    jogoParaString (src/Tarefa3_2021li1g063.hs:25)
+  50% (  7 / 14) in 'Tarefa4_2021li1g063'
+  Missing documentation for:
+    moveJogador (src/Tarefa4_2021li1g063.hs:32)
+    substituirVazioCaixa (src/Tarefa4_2021li1g063.hs:71)
+    tirarCaixa (src/Tarefa4_2021li1g063.hs:80)
+    substituirCaixaVazio (src/Tarefa4_2021li1g063.hs:86)
+    andarNaLateral (src/Tarefa4_2021li1g063.hs:117)
+    correrMovimentos (src/Tarefa4_2021li1g063.hs:135)
+    aux (src/Tarefa4_2021li1g063.hs:139)
+Documentation created:
+.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/doc/html/2021li1g063/index.html,
+.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/doc/html/2021li1g063/2021li1g063.txt
+2021li1g063> copy/register
+Installing library in /home/nelson/Documents/LI1/projectos/2021li1g063/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/lib/x86_64-linux-ghc-9.0.1/2021li1g063-0.1.0.0-C7f3En9yL8CDu7WPPpdBnd
+Registering library for 2021li1g063-0.1.0.0..
+Updating Haddock index for local packages in
+/home/nelson/Documents/LI1/projectos/2021li1g063/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/index.html
+Updating Haddock index for local packages and dependencies in
+/home/nelson/Documents/LI1/projectos/2021li1g063/.stack-work/install/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/all/index.html
+Haddock index for snapshot packages already up to date at:
+/home/nelson/.stack/snapshots/x86_64-linux-tinfo6/e619e721cfd93d212e783f07e0e112de47ec2ce9746d976e44e04c843f2a0455/9.0.1/doc/index.html
