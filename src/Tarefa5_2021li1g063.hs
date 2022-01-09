@@ -382,12 +382,12 @@ drawEstado (Estado (VerCreditos ShowCreditos) Nada (Jogo mapa1dojogo (Jogador (1
 
 
 -- | Desenhar Mapas 
-drawEstado (Estado est (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Este False)) i) = playMapa1 i
-drawEstado (Estado est (Play Mapa2)  (Jogo mapa2dojogo (Jogador (7,1) Este False)) i) = playMapa2 i
-drawEstado (Estado est (Play Mapa3)  (Jogo mapa3dojogo (Jogador (11,10) Este False)) i) = playMapa3 i
-drawEstado (Estado est (Play Mapa4)  (Jogo mapa4dojogo (Jogador (3,9) Este False)) i) = playMapa4 i 
-drawEstado (Estado est (Play Mapa5)  (Jogo mapa5dojogo (Jogador (16,8) Este False)) i) = playMapa5 i 
-drawEstado (Estado est (Play Mapa6)  (Jogo mapa6dojogo (Jogador (14,7) Este False)) i) = playMapa6 i 
+drawEstado (Estado (OpcaoNovojogo Mapa1) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Este False)) i) = playMapa1 i
+drawEstado (Estado (OpcaoNovojogo Mapa2) (Play Mapa2)  (Jogo mapa2dojogo (Jogador (7,1) Este False)) i) = playMapa2 i
+drawEstado (Estado (OpcaoNovojogo Mapa3) (Play Mapa3)  (Jogo mapa3dojogo (Jogador (11,10) Este False)) i) = playMapa3 i
+drawEstado (Estado (OpcaoNovojogo Mapa4) (Play Mapa4)  (Jogo mapa4dojogo (Jogador (3,9) Este False)) i) = playMapa4 i 
+drawEstado (Estado (OpcaoNovojogo Mapa5) (Play Mapa5)  (Jogo mapa5dojogo (Jogador (16,8) Este False)) i) = playMapa5 i 
+drawEstado (Estado (OpcaoNovojogo Mapa6) (Play Mapa6)  (Jogo mapa6dojogo (Jogador (14,7) Este False)) i) = playMapa6 i 
 drawEstado (Estado est Alterado  (Jogo mp (Jogador (x,y) dir tf)) i) = pictures (treatGame i (Jogo mp (Jogador (x,y) dir tf)))
 
 drawEstado (Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (x,y) Este False)) i) = pictures (treatGame i (Jogo mapa1dojogo (Jogador (x,y) Este False)))
@@ -469,12 +469,12 @@ reageEvento (EventKey (Char 'f') Down _ _) (Estado (OpcaoEscolherMapa Mapa6) Nad
     
 
 -- Começar Jogo Opção NovoJogo 
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoNovojogo SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Este False))i) = Estado (OpcaoNovojogo SemMapa) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Este False))i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoNovojogo SemMapa) Nada (Jogo mapa1dojogo (Jogador (10,10) Este False))i) = Estado (OpcaoNovojogo Mapa1) (Play Mapa1)  (Jogo mapa1dojogo (Jogador (10,10) Este False))i
 
 -- Começar Jogo Opção Escolher Mapa
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa1) Nada (Jogo mapa1dojogo (Jogador (10,10) Este False))i) = Estado (OpcaoEscolherMapa Mapa1) (Play Mapa1) (Jogo mapa1dojogo (Jogador (10,10) Este False))i
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa2) Nada (Jogo mapa2dojogo (Jogador (7,1) Este False))i) = Estado (OpcaoEscolherMapa Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (7,1) Este False))i
-reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Este False))i) = Estado (OpcaoEscolherMapa Mapa3) (Play Mapa3)  (Jogo mapa3dojogo (Jogador (8,8) Este False))i
+reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa3) Nada (Jogo mapa3dojogo (Jogador (11,10) Este False))i) = Estado (OpcaoEscolherMapa Mapa3) (Play Mapa3)  (Jogo mapa3dojogo (Jogador (11,10) Este False))i
 
 reageEvento (EventKey (SpecialKey KeyEnter) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Este False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Este False)) i
 reageEvento (EventKey (MouseButton LeftButton) Down _ _) (Estado (OpcaoEscolherMapa Mapa4) Nada (Jogo mapa4dojogo (Jogador (3,9) Este False)) i) = Estado (OpcaoEscolherMapa Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Este False)) i
@@ -615,15 +615,15 @@ drawMap i (h:t) (Jogador (x,y) d tf) a b  (cx,cy)
 -- Função que reage ao tempo, vai estar constantemente a comparar as coordenadas do Jogador com as Coordenadas da Porta,através da função giveWin 
 reageTempo :: Float -> Estado -> Estado
 reageTempo n (Estado (OpcaoNovojogo Mapa1) gam (Jogo m jogd ) i )
-                         | giveWin (Estado (OpcaoNovojogo Mapa1) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (7,1) Oeste False)) i 
+                         | giveWin (Estado (OpcaoNovojogo Mapa1) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa2) (Play Mapa2) (Jogo mapa2dojogo (Jogador (7,1) Este False)) i 
 reageTempo n (Estado (OpcaoNovojogo Mapa2) gam (Jogo m jogd ) i )                       
                          | giveWin (Estado (OpcaoNovojogo Mapa2) gam (Jogo m jogd ) i) = Estado (OpcaoNovojogo Mapa3) (Play Mapa3)  (Jogo mapa3dojogo (Jogador (11,10) Este False)) i
 reageTempo n (Estado (OpcaoNovojogo Mapa3) gam (Jogo m jogd ) i )
-                         | giveWin (Estado (OpcaoNovojogo Mapa3) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Oeste False)) i 
+                         | giveWin (Estado (OpcaoNovojogo Mapa3) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa4) (Play Mapa4) (Jogo mapa4dojogo (Jogador (3,9) Este False)) i 
 reageTempo n (Estado (OpcaoNovojogo Mapa4) gam (Jogo m jogd ) i )
-                         | giveWin (Estado (OpcaoNovojogo Mapa4) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (16,8 ) Oeste False)) i 
+                         | giveWin (Estado (OpcaoNovojogo Mapa4) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa5) (Play Mapa5) (Jogo mapa5dojogo (Jogador (16,8 ) Este False)) i 
 reageTempo n (Estado (OpcaoNovojogo Mapa5) gam (Jogo m jogd ) i )
-                         | giveWin (Estado (OpcaoNovojogo Mapa5) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (14,7) Oeste False)) i 
+                         | giveWin (Estado (OpcaoNovojogo Mapa5) gam (Jogo m jogd ) i ) = Estado (OpcaoNovojogo Mapa6) (Play Mapa6) (Jogo mapa6dojogo (Jogador (14,7) Este False)) i 
 reageTempo n (Estado (OpcaoNovojogo Mapa6) gam (Jogo m jogd ) i )                       
                          | giveWin (Estado (OpcaoNovojogo Mapa6) gam (Jogo m jogd ) i) = Estado (OpcaoNovojogo SemMapa) Nada  (Jogo mapa1dojogo (Jogador (10,10) Este False)) i                                                                                                    
 reageTempo n (Estado (OpcaoEscolherMapa mp) gam (Jogo m jogd) i ) 
@@ -651,6 +651,7 @@ main = do
       Just escolherMapasTitle <- loadJuicy "img/menuEscolherMapasTitle.png"
       Just whitespace <- loadJuicy "img/whitespace.png"
       play window background fr (estadoInicial [bloco,porta,caixa,playeresq,playerdir,space1,infoMenuTitle,controlosTitleMenu,regrasTitleMenu,creditosTitleMenu,gameTitle,space2,space3,space4,space5,escolherMapasTitle,whitespace]) drawEstado reageEvento reageTempo 
+
 
 
 
@@ -745,4 +746,5 @@ mapa6dojogo = [[Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, B
                [Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio],
                [Vazio, Vazio, Vazio, Bloco, Vazio, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio],
                [Vazio, Vazio, Vazio, Bloco, Bloco, Bloco, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio, Vazio]]
+
 
